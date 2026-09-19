@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "code": "T1 M6\nG0 X6 Y6 Z2\nG1 Z-7 F300\nG0 Z2\nT2 M6\nG0 X6 Y6 Z-5.8\nG1 X6.5 F300\nG3 X6.5 Y6 Z-5.000 I-0.5 J0\nG3 X6.5 Y6 Z-4.200 I-0.5 J0\nG3 X6.5 Y6 Z-3.400 I-0.5 J0\nG3 X6.5 Y6 Z-2.600 I-0.5 J0\nG3 X6.5 Y6 Z-1.800 I-0.5 J0\nG3 X6.5 Y6 Z-1.000 I-0.5 J0\nG1 X6\nG0 Z2",
+  "filename": "thread-m5.nc",
+  "stock": {
+    "x": 12,
+    "y": 12,
+    "z": 6,
+    "origin": "corner",
+    "zOrigin": "top"
+  },
+  "material": "aluminum",
+  "demo": false,
+  "assignments": {
+    "1": {
+      "id": "pilot",
+      "name": "Pilot bore",
+      "kind": "flat",
+      "diameter": 4.2,
+      "length": 12,
+      "shank": 3.175
+    },
+    "2": {
+      "id": "thread-milling-bit-1-8-shank-M5-d4-15mm",
+      "name": "M5 thread mill",
+      "kind": "thread",
+      "diameter": 4,
+      "neck": 3.0185048,
+      "pitch": 0.8,
+      "angle": 60,
+      "length": 15,
+      "shank": 3.175
+    }
+  }
+}

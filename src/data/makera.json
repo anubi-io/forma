@@ -1,0 +1,1287 @@
+{
+  "fetchedAt": "2026-09-18",
+  "source": "https://www.makera.com/collections/cnc-bits",
+  "tools": [
+    {
+      "id": "two-flute-ball-nose-engraving-bit-0.5mm-30.5mm",
+      "name": "Two Flute Ball Nose Engraving Bit - 6mm (15/64″) Shank · 0.5mm * 30.5mm",
+      "kind": "unsupported",
+      "diameter": 0.5,
+      "length": 30.5,
+      "shank": 6,
+      "source": "https://www.makera.com/products/two-flute-ball-nose-engraving-bit",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "two-flute-ball-nose-engraving-bit-1mm-30.5mm",
+      "name": "Two Flute Ball Nose Engraving Bit - 6mm (15/64″) Shank · 1mm * 30.5mm",
+      "kind": "unsupported",
+      "diameter": 1,
+      "length": 30.5,
+      "shank": 6,
+      "source": "https://www.makera.com/products/two-flute-ball-nose-engraving-bit",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "two-flute-ball-nose-engraving-bit-2mm-30.5mm",
+      "name": "Two Flute Ball Nose Engraving Bit - 6mm (15/64″) Shank · 2mm * 30.5mm",
+      "kind": "unsupported",
+      "diameter": 2,
+      "length": 30.5,
+      "shank": 6,
+      "source": "https://www.makera.com/products/two-flute-ball-nose-engraving-bit",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "chamfering-bit-3.175",
+      "name": "Chamfering Bit · 3.175 mm · 90°",
+      "kind": "v",
+      "diameter": 3.175,
+      "angle": 90,
+      "tip": 0.1,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/chamfering-bit",
+      "note": "Tip diameter from Makera's reference table. Maximum cone diameter equals the shank diameter; cutting length is not specified."
+    },
+    {
+      "id": "chamfering-bit-4",
+      "name": "Chamfering Bit · 4 mm · 90°",
+      "kind": "v",
+      "diameter": 4,
+      "angle": 90,
+      "tip": 0.1,
+      "shank": 4,
+      "source": "https://www.makera.com/products/chamfering-bit",
+      "note": "Tip diameter from Makera's reference table. Maximum cone diameter equals the shank diameter; cutting length is not specified."
+    },
+    {
+      "id": "chamfering-bit-6",
+      "name": "Chamfering Bit · 6 mm · 90°",
+      "kind": "v",
+      "diameter": 6,
+      "angle": 90,
+      "tip": 0.1,
+      "shank": 6,
+      "source": "https://www.makera.com/products/chamfering-bit",
+      "note": "Tip diameter from Makera's reference table. Maximum cone diameter equals the shank diameter; cutting length is not specified."
+    },
+    {
+      "id": "spiral-o-single-flute-bit-for-metal-6mm-shank-6mm-17mm",
+      "name": "Spiral 'O' Single Flute Bit for Metal- 6mm (15/64″) Shank · 6mm * 17mm",
+      "kind": "flat",
+      "diameter": 6,
+      "length": 17,
+      "shank": 6,
+      "source": "https://www.makera.com/products/spiral-o-single-flute-bit-for-metal-6mm-shank"
+    },
+    {
+      "id": "spiral-o-single-flute-bit-for-metal-6mm-shank-6mm-25mm",
+      "name": "Spiral 'O' Single Flute Bit for Metal- 6mm (15/64″) Shank · 6mm * 25mm",
+      "kind": "flat",
+      "diameter": 6,
+      "length": 25,
+      "shank": 6,
+      "source": "https://www.makera.com/products/spiral-o-single-flute-bit-for-metal-6mm-shank"
+    },
+    {
+      "id": "spiral-o-single-flute-bit-for-metal-6mm-shank-6mm-30mm",
+      "name": "Spiral 'O' Single Flute Bit for Metal- 6mm (15/64″) Shank · 6mm * 30mm",
+      "kind": "flat",
+      "diameter": 6,
+      "length": 30,
+      "shank": 6,
+      "source": "https://www.makera.com/products/spiral-o-single-flute-bit-for-metal-6mm-shank"
+    },
+    {
+      "id": "spiral-o-single-flute-bit-for-metal-4mm-shank-4mm-12mm",
+      "name": "Spiral 'O' Single Flute Bit for Metal - 4mm (5/32″) Shank · 4mm * 12mm",
+      "kind": "flat",
+      "diameter": 4,
+      "length": 12,
+      "shank": 4,
+      "source": "https://www.makera.com/products/spiral-o-single-flute-bit-for-metal-4mm-shank"
+    },
+    {
+      "id": "spiral-o-single-flute-bit-for-metal-4mm-shank-4mm-17mm",
+      "name": "Spiral 'O' Single Flute Bit for Metal - 4mm (5/32″) Shank · 4mm * 17mm",
+      "kind": "flat",
+      "diameter": 4,
+      "length": 17,
+      "shank": 4,
+      "source": "https://www.makera.com/products/spiral-o-single-flute-bit-for-metal-4mm-shank"
+    },
+    {
+      "id": "spiral-o-single-flute-bit-for-metal-4mm-shank-4mm-22mm",
+      "name": "Spiral 'O' Single Flute Bit for Metal - 4mm (5/32″) Shank · 4mm * 22mm",
+      "kind": "flat",
+      "diameter": 4,
+      "length": 22,
+      "shank": 4,
+      "source": "https://www.makera.com/products/spiral-o-single-flute-bit-for-metal-4mm-shank"
+    },
+    {
+      "id": "spiral-o-single-flute-bit-6mm-shank-6mm-22mm",
+      "name": "Spiral 'O' Single Flute Bit - 6mm (15/64″) Shank · 6mm * 22mm",
+      "kind": "flat",
+      "diameter": 6,
+      "length": 22,
+      "shank": 6,
+      "source": "https://www.makera.com/products/spiral-o-single-flute-bit-6mm-shank"
+    },
+    {
+      "id": "spiral-o-single-flute-bit-6mm-shank-6mm-25mm",
+      "name": "Spiral 'O' Single Flute Bit - 6mm (15/64″) Shank · 6mm * 25mm",
+      "kind": "flat",
+      "diameter": 6,
+      "length": 25,
+      "shank": 6,
+      "source": "https://www.makera.com/products/spiral-o-single-flute-bit-6mm-shank"
+    },
+    {
+      "id": "spiral-o-single-flute-bit-6mm-shank-6mm-32mm",
+      "name": "Spiral 'O' Single Flute Bit - 6mm (15/64″) Shank · 6mm * 32mm",
+      "kind": "flat",
+      "diameter": 6,
+      "length": 32,
+      "shank": 6,
+      "source": "https://www.makera.com/products/spiral-o-single-flute-bit-6mm-shank"
+    },
+    {
+      "id": "two-flute-engraving-bit-6mm-shank-20-0.3mm",
+      "name": "Two Flute Engraving Bit - 6mm (15/64″) Shank · 20º * 0.3mm",
+      "kind": "v",
+      "diameter": 6,
+      "angle": 20,
+      "tip": 0.3,
+      "shank": 6,
+      "source": "https://www.makera.com/products/two-flute-engraving-bit-6mm-shank"
+    },
+    {
+      "id": "two-flute-engraving-bit-6mm-shank-20-0.4mm",
+      "name": "Two Flute Engraving Bit - 6mm (15/64″) Shank · 20º * 0.4mm",
+      "kind": "v",
+      "diameter": 6,
+      "angle": 20,
+      "tip": 0.4,
+      "shank": 6,
+      "source": "https://www.makera.com/products/two-flute-engraving-bit-6mm-shank"
+    },
+    {
+      "id": "two-flute-engraving-bit-6mm-shank-20-0.5mm",
+      "name": "Two Flute Engraving Bit - 6mm (15/64″) Shank · 20º * 0.5mm",
+      "kind": "v",
+      "diameter": 6,
+      "angle": 20,
+      "tip": 0.5,
+      "shank": 6,
+      "source": "https://www.makera.com/products/two-flute-engraving-bit-6mm-shank"
+    },
+    {
+      "id": "two-flute-ball-nose-bit-for-metal-4mm-shank-4mm-12mm",
+      "name": "Two Flute Ball Nose Bit for Metal - 4mm (5/32″) Shank · 4mm * 12mm",
+      "kind": "ball",
+      "diameter": 4,
+      "length": 12,
+      "shank": 4,
+      "source": "https://www.makera.com/products/two-flute-ball-nose-bit-for-metal-4mm-shank"
+    },
+    {
+      "id": "two-flute-ball-nose-bit-for-metal-6mm-shank-6mm-18mm",
+      "name": "Two Flute Ball Nose Bit for Metal - 6mm (15/64″) Shank · 6mm * 18mm",
+      "kind": "ball",
+      "diameter": 6,
+      "length": 18,
+      "shank": 6,
+      "source": "https://www.makera.com/products/two-flute-ball-nose-bit-for-metal-6mm-shank"
+    },
+    {
+      "id": "two-flute-ball-nose-bit-4mm-shank-4mm-12mm",
+      "name": "Two Flute Ball Nose Bit - 4mm (5/32\") Shank · 4mm * 12mm",
+      "kind": "ball",
+      "diameter": 4,
+      "length": 12,
+      "shank": 4,
+      "source": "https://www.makera.com/products/two-flute-ball-nose-bit-4mm-shank"
+    },
+    {
+      "id": "two-flute-ball-nose-bit-4mm-shank-4mm-22mm",
+      "name": "Two Flute Ball Nose Bit - 4mm (5/32\") Shank · 4mm * 22mm",
+      "kind": "ball",
+      "diameter": 4,
+      "length": 22,
+      "shank": 4,
+      "source": "https://www.makera.com/products/two-flute-ball-nose-bit-4mm-shank"
+    },
+    {
+      "id": "two-flute-ball-nose-bit-4mm-shank-4mm-32mm",
+      "name": "Two Flute Ball Nose Bit - 4mm (5/32\") Shank · 4mm * 32mm",
+      "kind": "ball",
+      "diameter": 4,
+      "length": 32,
+      "shank": 4,
+      "source": "https://www.makera.com/products/two-flute-ball-nose-bit-4mm-shank"
+    },
+    {
+      "id": "two-flute-ball-nose-bit-6mm-shank-6mm-12mm",
+      "name": "Two Flute Ball Nose Bit - 6mm (15/64\") Shank · 6mm * 12mm",
+      "kind": "ball",
+      "diameter": 6,
+      "length": 12,
+      "shank": 6,
+      "source": "https://www.makera.com/products/two-flute-ball-nose-bit-6mm-shank"
+    },
+    {
+      "id": "two-flute-ball-nose-bit-6mm-shank-6mm-22mm",
+      "name": "Two Flute Ball Nose Bit - 6mm (15/64\") Shank · 6mm * 22mm",
+      "kind": "ball",
+      "diameter": 6,
+      "length": 22,
+      "shank": 6,
+      "source": "https://www.makera.com/products/two-flute-ball-nose-bit-6mm-shank"
+    },
+    {
+      "id": "two-flute-ball-nose-bit-6mm-shank-6mm-32mm",
+      "name": "Two Flute Ball Nose Bit - 6mm (15/64\") Shank · 6mm * 32mm",
+      "kind": "ball",
+      "diameter": 6,
+      "length": 32,
+      "shank": 6,
+      "source": "https://www.makera.com/products/two-flute-ball-nose-bit-6mm-shank"
+    },
+    {
+      "id": "single-flute-engraving-bit-for-metal-4mm-shank-30-0.3mm",
+      "name": "Single Flute Engraving Bit for Metal - 4mm (5/32″) Shank · 30º * 0.3mm",
+      "kind": "v",
+      "diameter": 4,
+      "angle": 30,
+      "tip": 0.3,
+      "shank": 4,
+      "source": "https://www.makera.com/products/single-flute-engraving-bit-for-metal-4mm-shank"
+    },
+    {
+      "id": "single-flute-engraving-bit-for-metal-4mm-shank-30-0.4mm",
+      "name": "Single Flute Engraving Bit for Metal - 4mm (5/32″) Shank · 30º * 0.4mm",
+      "kind": "v",
+      "diameter": 4,
+      "angle": 30,
+      "tip": 0.4,
+      "shank": 4,
+      "source": "https://www.makera.com/products/single-flute-engraving-bit-for-metal-4mm-shank"
+    },
+    {
+      "id": "single-flute-engraving-bit-for-metal-4mm-shank-30-0.5mm",
+      "name": "Single Flute Engraving Bit for Metal - 4mm (5/32″) Shank · 30º * 0.5mm",
+      "kind": "v",
+      "diameter": 4,
+      "angle": 30,
+      "tip": 0.5,
+      "shank": 4,
+      "source": "https://www.makera.com/products/single-flute-engraving-bit-for-metal-4mm-shank"
+    },
+    {
+      "id": "single-flute-engraving-bit-4mm-shank-30-0.1mm",
+      "name": "Single Flute Engraving Bit - 4mm (5/32″) Shank · 30º * 0.1mm",
+      "kind": "v",
+      "diameter": 4,
+      "angle": 30,
+      "tip": 0.1,
+      "shank": 4,
+      "source": "https://www.makera.com/products/single-flute-engraving-bit-4mm-shank"
+    },
+    {
+      "id": "single-flute-engraving-bit-4mm-shank-30-0.2mm",
+      "name": "Single Flute Engraving Bit - 4mm (5/32″) Shank · 30º * 0.2mm",
+      "kind": "v",
+      "diameter": 4,
+      "angle": 30,
+      "tip": 0.2,
+      "shank": 4,
+      "source": "https://www.makera.com/products/single-flute-engraving-bit-4mm-shank"
+    },
+    {
+      "id": "single-flute-engraving-bit-4mm-shank-30-0.3mm",
+      "name": "Single Flute Engraving Bit - 4mm (5/32″) Shank · 30º * 0.3mm",
+      "kind": "v",
+      "diameter": 4,
+      "angle": 30,
+      "tip": 0.3,
+      "shank": 4,
+      "source": "https://www.makera.com/products/single-flute-engraving-bit-4mm-shank"
+    },
+    {
+      "id": "single-flute-engraving-bit-4mm-shank-30-0.4mm",
+      "name": "Single Flute Engraving Bit - 4mm (5/32″) Shank · 30º * 0.4mm",
+      "kind": "v",
+      "diameter": 4,
+      "angle": 30,
+      "tip": 0.4,
+      "shank": 4,
+      "source": "https://www.makera.com/products/single-flute-engraving-bit-4mm-shank"
+    },
+    {
+      "id": "single-flute-engraving-bit-4mm-shank-30-0.5mm",
+      "name": "Single Flute Engraving Bit - 4mm (5/32″) Shank · 30º * 0.5mm",
+      "kind": "v",
+      "diameter": 4,
+      "angle": 30,
+      "tip": 0.5,
+      "shank": 4,
+      "source": "https://www.makera.com/products/single-flute-engraving-bit-4mm-shank"
+    },
+    {
+      "id": "spiral-o-single-flute-bit-4mm-shank-4mm-22mm",
+      "name": "Spiral 'O' Single Flute Bit - 4mm (5/32″) Shank · 4mm * 22mm",
+      "kind": "flat",
+      "diameter": 4,
+      "length": 22,
+      "shank": 4,
+      "source": "https://www.makera.com/products/spiral-o-single-flute-bit-4mm-shank"
+    },
+    {
+      "id": "spiral-o-single-flute-bit-4mm-shank-4mm-25mm",
+      "name": "Spiral 'O' Single Flute Bit - 4mm (5/32″) Shank · 4mm * 25mm",
+      "kind": "flat",
+      "diameter": 4,
+      "length": 25,
+      "shank": 4,
+      "source": "https://www.makera.com/products/spiral-o-single-flute-bit-4mm-shank"
+    },
+    {
+      "id": "spiral-o-single-flute-bit-4mm-shank-4mm-32mm",
+      "name": "Spiral 'O' Single Flute Bit - 4mm (5/32″) Shank · 4mm * 32mm",
+      "kind": "flat",
+      "diameter": 4,
+      "length": 32,
+      "shank": 4,
+      "source": "https://www.makera.com/products/spiral-o-single-flute-bit-4mm-shank"
+    },
+    {
+      "id": "thread-milling-bit-6mm-shank-M6-d4.8mm-18mm",
+      "name": "Thread Milling Bit - 6mm (15/64\") Shank · M6(d4.8mm) * 18mm",
+      "kind": "thread",
+      "diameter": 4.8,
+      "length": 18,
+      "shank": 6,
+      "source": "https://www.makera.com/products/thread-milling-bit-6mm-shank",
+      "note": "WebGPU thread removal. Published diameter, 60° angle and reference pitch; idealized single-form tooth and estimated neck. The helix follows G-code.",
+      "pitch": 1,
+      "angle": 60,
+      "neck": 3.573131
+    },
+    {
+      "id": "thread-milling-bit-6mm-shank-M8-d6mm-24mm",
+      "name": "Thread Milling Bit - 6mm (15/64\") Shank · M8(d6mm) * 24mm",
+      "kind": "thread",
+      "diameter": 6,
+      "length": 24,
+      "shank": 6,
+      "source": "https://www.makera.com/products/thread-milling-bit-6mm-shank",
+      "note": "WebGPU thread removal. Published diameter, 60° angle and reference pitch; idealized single-form tooth and estimated neck. The helix follows G-code.",
+      "pitch": 1.25,
+      "angle": 60,
+      "neck": 4.46641375
+    },
+    {
+      "id": "uv-solder-mask-removal-tool-1-8-shank-Default-Title",
+      "name": "UV Solder Mask Removal Tool - 1/8″ Shank · Default Title",
+      "kind": "unsupported",
+      "diameter": 0.3,
+      "tip": 0.3,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/uv-solder-mask-removal-tool-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "thread-milling-bit-1-8-shank-M1-d0.7mm-3mm",
+      "name": "Thread Milling Bit - 1/8″ Shank · M1(d0.7mm) * 3mm",
+      "kind": "thread",
+      "diameter": 0.7,
+      "length": 3,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/thread-milling-bit-1-8-shank",
+      "note": "WebGPU thread removal. Published diameter, 60° angle and reference pitch; idealized single-form tooth and estimated neck. The helix follows G-code.",
+      "pitch": 0.25,
+      "angle": 60,
+      "neck": 0.39328274999999996
+    },
+    {
+      "id": "thread-milling-bit-1-8-shank-M2-d1.5mm-6mm",
+      "name": "Thread Milling Bit - 1/8″ Shank · M2(d1.5mm) * 6mm",
+      "kind": "thread",
+      "diameter": 1.5,
+      "length": 6,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/thread-milling-bit-1-8-shank",
+      "note": "WebGPU thread removal. Published diameter, 60° angle and reference pitch; idealized single-form tooth and estimated neck. The helix follows G-code.",
+      "pitch": 0.4,
+      "angle": 60,
+      "neck": 1.0092524
+    },
+    {
+      "id": "thread-milling-bit-1-8-shank-M2.5-d1.95mm-7.5mm",
+      "name": "Thread Milling Bit - 1/8″ Shank · M2.5(d1.95mm) * 7.5mm",
+      "kind": "thread",
+      "diameter": 1.95,
+      "length": 7.5,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/thread-milling-bit-1-8-shank",
+      "note": "WebGPU thread removal. Published diameter, 60° angle and reference pitch; idealized single-form tooth and estimated neck. The helix follows G-code.",
+      "pitch": 0.45,
+      "angle": 60,
+      "neck": 1.39790895
+    },
+    {
+      "id": "thread-milling-bit-1-8-shank-M3-d2.4mm-9mm",
+      "name": "Thread Milling Bit - 1/8″ Shank · M3(d2.4mm) * 9mm",
+      "kind": "thread",
+      "diameter": 2.4,
+      "length": 9,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/thread-milling-bit-1-8-shank",
+      "note": "WebGPU thread removal. Published diameter, 60° angle and reference pitch; idealized single-form tooth and estimated neck. The helix follows G-code.",
+      "pitch": 0.5,
+      "angle": 60,
+      "neck": 1.7865655
+    },
+    {
+      "id": "thread-milling-bit-1-8-shank-M4-d3.15-12mm",
+      "name": "Thread Milling Bit - 1/8″ Shank · M4(d3.15) * 12mm",
+      "kind": "thread",
+      "diameter": 3.15,
+      "length": 12,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/thread-milling-bit-1-8-shank",
+      "note": "WebGPU thread removal. Published diameter, 60° angle and reference pitch; idealized single-form tooth and estimated neck. The helix follows G-code.",
+      "pitch": 0.7,
+      "angle": 60,
+      "neck": 2.2911916999999997
+    },
+    {
+      "id": "thread-milling-bit-1-8-shank-M5-d4-15mm",
+      "name": "Thread Milling Bit - 1/8″ Shank · M5(d4) * 15mm",
+      "kind": "thread",
+      "diameter": 4,
+      "length": 15,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/thread-milling-bit-1-8-shank",
+      "note": "WebGPU thread removal. Published diameter, 60° angle and reference pitch; idealized single-form tooth and estimated neck. The helix follows G-code.",
+      "pitch": 0.8,
+      "angle": 60,
+      "neck": 3.0185048
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-0.2mm-3.5mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 0.2mm * 3.5mm",
+      "kind": "unsupported",
+      "diameter": 0.2,
+      "length": 3.5,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-0.3mm-5.5mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 0.3mm * 5.5mm",
+      "kind": "unsupported",
+      "diameter": 0.3,
+      "length": 5.5,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-0.4mm-7mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 0.4mm * 7mm",
+      "kind": "unsupported",
+      "diameter": 0.4,
+      "length": 7,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-0.5mm-8.5mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 0.5mm * 8.5mm",
+      "kind": "unsupported",
+      "diameter": 0.5,
+      "length": 8.5,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-0.6mm-9.5mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 0.6mm * 9.5mm",
+      "kind": "unsupported",
+      "diameter": 0.6,
+      "length": 9.5,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-0.7mm-10mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 0.7mm * 10mm",
+      "kind": "unsupported",
+      "diameter": 0.7,
+      "length": 10,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-0.8mm-10mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 0.8mm * 10mm",
+      "kind": "unsupported",
+      "diameter": 0.8,
+      "length": 10,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-0.9mm-10mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 0.9mm * 10mm",
+      "kind": "unsupported",
+      "diameter": 0.9,
+      "length": 10,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-1mm-10mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 1mm * 10mm",
+      "kind": "unsupported",
+      "diameter": 1,
+      "length": 10,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-1.1mm-10mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 1.1mm * 10mm",
+      "kind": "unsupported",
+      "diameter": 1.1,
+      "length": 10,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-1.2mm-10mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 1.2mm * 10mm",
+      "kind": "unsupported",
+      "diameter": 1.2,
+      "length": 10,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-1.3mm-12mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 1.3mm * 12mm",
+      "kind": "unsupported",
+      "diameter": 1.3,
+      "length": 12,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-1.4mm-12mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 1.4mm * 12mm",
+      "kind": "unsupported",
+      "diameter": 1.4,
+      "length": 12,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-1.5mm-12mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 1.5mm * 12mm",
+      "kind": "unsupported",
+      "diameter": 1.5,
+      "length": 12,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-1.6mm-12mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 1.6mm * 12mm",
+      "kind": "unsupported",
+      "diameter": 1.6,
+      "length": 12,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-1.7mm-12mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 1.7mm * 12mm",
+      "kind": "unsupported",
+      "diameter": 1.7,
+      "length": 12,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-1.8mm-12mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 1.8mm * 12mm",
+      "kind": "unsupported",
+      "diameter": 1.8,
+      "length": 12,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-1.9mm-12mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 1.9mm * 12mm",
+      "kind": "unsupported",
+      "diameter": 1.9,
+      "length": 12,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-2mm-12mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 2mm * 12mm",
+      "kind": "unsupported",
+      "diameter": 2,
+      "length": 12,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-2.1mm-12mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 2.1mm * 12mm",
+      "kind": "unsupported",
+      "diameter": 2.1,
+      "length": 12,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-2.2mm-12mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 2.2mm * 12mm",
+      "kind": "unsupported",
+      "diameter": 2.2,
+      "length": 12,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-2.3mm-12mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 2.3mm * 12mm",
+      "kind": "unsupported",
+      "diameter": 2.3,
+      "length": 12,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-2.4mm-12mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 2.4mm * 12mm",
+      "kind": "unsupported",
+      "diameter": 2.4,
+      "length": 12,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-2.5mm-12mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 2.5mm * 12mm",
+      "kind": "unsupported",
+      "diameter": 2.5,
+      "length": 12,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-2.6mm-12mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 2.6mm * 12mm",
+      "kind": "unsupported",
+      "diameter": 2.6,
+      "length": 12,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-2.7mm-12mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 2.7mm * 12mm",
+      "kind": "unsupported",
+      "diameter": 2.7,
+      "length": 12,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-2.8mm-12mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 2.8mm * 12mm",
+      "kind": "unsupported",
+      "diameter": 2.8,
+      "length": 12,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-2.9mm-12mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 2.9mm * 12mm",
+      "kind": "unsupported",
+      "diameter": 2.9,
+      "length": 12,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-3mm-12mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 3mm * 12mm",
+      "kind": "unsupported",
+      "diameter": 3,
+      "length": 12,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "tin-coating-drill-bit-1-8-shank-3.175mm-12mm",
+      "name": "TiN Coating Drill Bit - 1/8″ Shank · 3.175mm * 12mm",
+      "kind": "unsupported",
+      "diameter": 3.175,
+      "length": 12,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-drill-bit-1-8-shank",
+      "note": "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine."
+    },
+    {
+      "id": "two-flute-ball-nose-bit-1-8-shank-1mm-4mm",
+      "name": "Two Flute Ball Nose Bit - 1/8″ Shank · 1mm * 4mm",
+      "kind": "ball",
+      "diameter": 1,
+      "length": 4,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/two-flute-ball-nose-bit-1-8-shank"
+    },
+    {
+      "id": "two-flute-ball-nose-bit-1-8-shank-1.5mm-8mm",
+      "name": "Two Flute Ball Nose Bit - 1/8″ Shank · 1.5mm * 8mm",
+      "kind": "ball",
+      "diameter": 1.5,
+      "length": 8,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/two-flute-ball-nose-bit-1-8-shank"
+    },
+    {
+      "id": "two-flute-ball-nose-bit-1-8-shank-2mm-12mm",
+      "name": "Two Flute Ball Nose Bit - 1/8″ Shank · 2mm * 12mm",
+      "kind": "ball",
+      "diameter": 2,
+      "length": 12,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/two-flute-ball-nose-bit-1-8-shank"
+    },
+    {
+      "id": "two-flute-ball-nose-bit-1-8-shank-2.5mm-15mm",
+      "name": "Two Flute Ball Nose Bit - 1/8″ Shank · 2.5mm * 15mm",
+      "kind": "ball",
+      "diameter": 2.5,
+      "length": 15,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/two-flute-ball-nose-bit-1-8-shank"
+    },
+    {
+      "id": "two-flute-ball-nose-bit-1-8-shank-3.175mm-22mm",
+      "name": "Two Flute Ball Nose Bit - 1/8″ Shank · 3.175mm * 22mm",
+      "kind": "ball",
+      "diameter": 3.175,
+      "length": 22,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/two-flute-ball-nose-bit-1-8-shank"
+    },
+    {
+      "id": "two-flute-ball-nose-bit-for-metal-1-8-shank-1mm-3mm",
+      "name": "Two Flute Ball Nose Bit for Metal - 1/8″ Shank · 1mm * 3mm",
+      "kind": "ball",
+      "diameter": 1,
+      "length": 3,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/two-flute-ball-nose-bit-for-metal-1-8-shank"
+    },
+    {
+      "id": "two-flute-ball-nose-bit-for-metal-1-8-shank-1.5mm-4.5mm",
+      "name": "Two Flute Ball Nose Bit for Metal - 1/8″ Shank · 1.5mm * 4.5mm",
+      "kind": "ball",
+      "diameter": 1.5,
+      "length": 4.5,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/two-flute-ball-nose-bit-for-metal-1-8-shank"
+    },
+    {
+      "id": "two-flute-ball-nose-bit-for-metal-1-8-shank-2mm-6mm",
+      "name": "Two Flute Ball Nose Bit for Metal - 1/8″ Shank · 2mm * 6mm",
+      "kind": "ball",
+      "diameter": 2,
+      "length": 6,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/two-flute-ball-nose-bit-for-metal-1-8-shank"
+    },
+    {
+      "id": "two-flute-ball-nose-bit-for-metal-1-8-shank-2.5mm-7.5mm",
+      "name": "Two Flute Ball Nose Bit for Metal - 1/8″ Shank · 2.5mm * 7.5mm",
+      "kind": "ball",
+      "diameter": 2.5,
+      "length": 7.5,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/two-flute-ball-nose-bit-for-metal-1-8-shank"
+    },
+    {
+      "id": "two-flute-ball-nose-bit-for-metal-1-8-shank-3.175mm-10mm",
+      "name": "Two Flute Ball Nose Bit for Metal - 1/8″ Shank · 3.175mm * 10mm",
+      "kind": "ball",
+      "diameter": 3.175,
+      "length": 10,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/two-flute-ball-nose-bit-for-metal-1-8-shank"
+    },
+    {
+      "id": "single-flute-engraving-bit-1-8-shank-30-0.1mm",
+      "name": "Single Flute Engraving Bit - 1/8″ Shank · 30º * 0.1mm",
+      "kind": "v",
+      "diameter": 3.175,
+      "angle": 30,
+      "tip": 0.1,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/single-flute-engraving-bit-1-8-shank"
+    },
+    {
+      "id": "single-flute-engraving-bit-1-8-shank-30-0.2mm",
+      "name": "Single Flute Engraving Bit - 1/8″ Shank · 30º * 0.2mm",
+      "kind": "v",
+      "diameter": 3.175,
+      "angle": 30,
+      "tip": 0.2,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/single-flute-engraving-bit-1-8-shank"
+    },
+    {
+      "id": "single-flute-engraving-bit-1-8-shank-30-0.3mm",
+      "name": "Single Flute Engraving Bit - 1/8″ Shank · 30º * 0.3mm",
+      "kind": "v",
+      "diameter": 3.175,
+      "angle": 30,
+      "tip": 0.3,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/single-flute-engraving-bit-1-8-shank"
+    },
+    {
+      "id": "single-flute-engraving-bit-1-8-shank-30-0.4mm",
+      "name": "Single Flute Engraving Bit - 1/8″ Shank · 30º * 0.4mm",
+      "kind": "v",
+      "diameter": 3.175,
+      "angle": 30,
+      "tip": 0.4,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/single-flute-engraving-bit-1-8-shank"
+    },
+    {
+      "id": "single-flute-engraving-bit-1-8-shank-30-0.5mm",
+      "name": "Single Flute Engraving Bit - 1/8″ Shank · 30º * 0.5mm",
+      "kind": "v",
+      "diameter": 3.175,
+      "angle": 30,
+      "tip": 0.5,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/single-flute-engraving-bit-1-8-shank"
+    },
+    {
+      "id": "single-flute-engraving-bit-for-metal-1-8-shank-60-0.1mm",
+      "name": "Single Flute Engraving Bit for Metal - 1/8″ Shank · 60º * 0.1mm",
+      "kind": "v",
+      "diameter": 3.175,
+      "angle": 60,
+      "tip": 0.1,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/single-flute-engraving-bit-for-metal-1-8-shank"
+    },
+    {
+      "id": "single-flute-engraving-bit-for-metal-1-8-shank-30-0.2mm",
+      "name": "Single Flute Engraving Bit for Metal - 1/8″ Shank · 30º * 0.2mm",
+      "kind": "v",
+      "diameter": 3.175,
+      "angle": 30,
+      "tip": 0.2,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/single-flute-engraving-bit-for-metal-1-8-shank"
+    },
+    {
+      "id": "single-flute-engraving-bit-for-metal-1-8-shank-30-0.3mm",
+      "name": "Single Flute Engraving Bit for Metal - 1/8″ Shank · 30º * 0.3mm",
+      "kind": "v",
+      "diameter": 3.175,
+      "angle": 30,
+      "tip": 0.3,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/single-flute-engraving-bit-for-metal-1-8-shank"
+    },
+    {
+      "id": "single-flute-engraving-bit-for-metal-1-8-shank-30-0.4mm",
+      "name": "Single Flute Engraving Bit for Metal - 1/8″ Shank · 30º * 0.4mm",
+      "kind": "v",
+      "diameter": 3.175,
+      "angle": 30,
+      "tip": 0.4,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/single-flute-engraving-bit-for-metal-1-8-shank"
+    },
+    {
+      "id": "single-flute-engraving-bit-for-metal-1-8-shank-30-0.5mm",
+      "name": "Single Flute Engraving Bit for Metal - 1/8″ Shank · 30º * 0.5mm",
+      "kind": "v",
+      "diameter": 3.175,
+      "angle": 30,
+      "tip": 0.5,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/single-flute-engraving-bit-for-metal-1-8-shank"
+    },
+    {
+      "id": "spiral-o-single-flute-bit-1-8-shank-3.175mm-42mm",
+      "name": "Spiral 'O' Single Flute Bit - 1/8″ Shank · 3.175mm * 42mm",
+      "kind": "flat",
+      "diameter": 3.175,
+      "length": 42,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/spiral-o-single-flute-bit-1-8-shank"
+    },
+    {
+      "id": "spiral-o-single-flute-bit-1-8-shank-3.175mm-32mm",
+      "name": "Spiral 'O' Single Flute Bit - 1/8″ Shank · 3.175mm * 32mm",
+      "kind": "flat",
+      "diameter": 3.175,
+      "length": 32,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/spiral-o-single-flute-bit-1-8-shank"
+    },
+    {
+      "id": "spiral-o-single-flute-bit-1-8-shank-3.175mm-25mm",
+      "name": "Spiral 'O' Single Flute Bit - 1/8″ Shank · 3.175mm * 25mm",
+      "kind": "flat",
+      "diameter": 3.175,
+      "length": 25,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/spiral-o-single-flute-bit-1-8-shank"
+    },
+    {
+      "id": "spiral-o-single-flute-bit-1-8-shank-3.175mm-17mm",
+      "name": "Spiral 'O' Single Flute Bit - 1/8″ Shank · 3.175mm * 17mm",
+      "kind": "flat",
+      "diameter": 3.175,
+      "length": 17,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/spiral-o-single-flute-bit-1-8-shank"
+    },
+    {
+      "id": "spiral-o-single-flute-bit-1-8-shank-2.5mm-15mm",
+      "name": "Spiral 'O' Single Flute Bit - 1/8″ Shank · 2.5mm * 15mm",
+      "kind": "flat",
+      "diameter": 2.5,
+      "length": 15,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/spiral-o-single-flute-bit-1-8-shank"
+    },
+    {
+      "id": "spiral-o-single-flute-bit-1-8-shank-2mm-12mm",
+      "name": "Spiral 'O' Single Flute Bit - 1/8″ Shank · 2mm * 12mm",
+      "kind": "flat",
+      "diameter": 2,
+      "length": 12,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/spiral-o-single-flute-bit-1-8-shank"
+    },
+    {
+      "id": "spiral-o-single-flute-bit-1-8-shank-1.5mm-8mm",
+      "name": "Spiral 'O' Single Flute Bit - 1/8″ Shank · 1.5mm * 8mm",
+      "kind": "flat",
+      "diameter": 1.5,
+      "length": 8,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/spiral-o-single-flute-bit-1-8-shank"
+    },
+    {
+      "id": "spiral-o-single-flute-bit-1-8-shank-1mm-3mm",
+      "name": "Spiral 'O' Single Flute Bit - 1/8″ Shank · 1mm * 3mm",
+      "kind": "flat",
+      "diameter": 1,
+      "length": 3,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/spiral-o-single-flute-bit-1-8-shank"
+    },
+    {
+      "id": "spiral-o-single-flute-bit-for-metal-1-8-shank-3.175mm-12mm",
+      "name": "Spiral 'O' Single Flute Bit for Metal - 1/8″ Shank · 3.175mm * 12mm",
+      "kind": "flat",
+      "diameter": 3.175,
+      "length": 12,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/spiral-o-single-flute-bit-for-metal-1-8-shank"
+    },
+    {
+      "id": "spiral-o-single-flute-bit-for-metal-1-8-shank-2.5mm-12mm",
+      "name": "Spiral 'O' Single Flute Bit for Metal - 1/8″ Shank · 2.5mm * 12mm",
+      "kind": "flat",
+      "diameter": 2.5,
+      "length": 12,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/spiral-o-single-flute-bit-for-metal-1-8-shank"
+    },
+    {
+      "id": "spiral-o-single-flute-bit-for-metal-1-8-shank-2mm-8mm",
+      "name": "Spiral 'O' Single Flute Bit for Metal - 1/8″ Shank · 2mm * 8mm",
+      "kind": "flat",
+      "diameter": 2,
+      "length": 8,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/spiral-o-single-flute-bit-for-metal-1-8-shank"
+    },
+    {
+      "id": "spiral-o-single-flute-bit-for-metal-1-8-shank-1.5mm-6mm",
+      "name": "Spiral 'O' Single Flute Bit for Metal - 1/8″ Shank · 1.5mm * 6mm",
+      "kind": "flat",
+      "diameter": 1.5,
+      "length": 6,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/spiral-o-single-flute-bit-for-metal-1-8-shank"
+    },
+    {
+      "id": "spiral-o-single-flute-bit-for-metal-1-8-shank-1mm-3mm",
+      "name": "Spiral 'O' Single Flute Bit for Metal - 1/8″ Shank · 1mm * 3mm",
+      "kind": "flat",
+      "diameter": 1,
+      "length": 3,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/spiral-o-single-flute-bit-for-metal-1-8-shank"
+    },
+    {
+      "id": "tin-coating-corn-bit-1-8-shank-0.6mm-3mm",
+      "name": "TiN Coating Corn Bit - 1/8″ Shank · 0.6mm * 3mm",
+      "kind": "flat",
+      "diameter": 0.6,
+      "length": 3,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-corn-bit-1-8-shank"
+    },
+    {
+      "id": "tin-coating-corn-bit-1-8-shank-0.7mm-4mm",
+      "name": "TiN Coating Corn Bit - 1/8″ Shank · 0.7mm * 4mm",
+      "kind": "flat",
+      "diameter": 0.7,
+      "length": 4,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-corn-bit-1-8-shank"
+    },
+    {
+      "id": "tin-coating-corn-bit-1-8-shank-0.8mm-5.5mm",
+      "name": "TiN Coating Corn Bit - 1/8″ Shank · 0.8mm * 5.5mm",
+      "kind": "flat",
+      "diameter": 0.8,
+      "length": 5.5,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-corn-bit-1-8-shank"
+    },
+    {
+      "id": "tin-coating-corn-bit-1-8-shank-0.9mm-6mm",
+      "name": "TiN Coating Corn Bit - 1/8″ Shank · 0.9mm * 6mm",
+      "kind": "flat",
+      "diameter": 0.9,
+      "length": 6,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-corn-bit-1-8-shank"
+    },
+    {
+      "id": "tin-coating-corn-bit-1-8-shank-1mm-7mm",
+      "name": "TiN Coating Corn Bit - 1/8″ Shank · 1mm * 7mm",
+      "kind": "flat",
+      "diameter": 1,
+      "length": 7,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-corn-bit-1-8-shank"
+    },
+    {
+      "id": "tin-coating-corn-bit-1-8-shank-1.1mm-7mm",
+      "name": "TiN Coating Corn Bit - 1/8″ Shank · 1.1mm * 7mm",
+      "kind": "flat",
+      "diameter": 1.1,
+      "length": 7,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-corn-bit-1-8-shank"
+    },
+    {
+      "id": "tin-coating-corn-bit-1-8-shank-1.2mm-7mm",
+      "name": "TiN Coating Corn Bit - 1/8″ Shank · 1.2mm * 7mm",
+      "kind": "flat",
+      "diameter": 1.2,
+      "length": 7,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-corn-bit-1-8-shank"
+    },
+    {
+      "id": "tin-coating-corn-bit-1-8-shank-1.3mm-7.5mm",
+      "name": "TiN Coating Corn Bit - 1/8″ Shank · 1.3mm * 7.5mm",
+      "kind": "flat",
+      "diameter": 1.3,
+      "length": 7.5,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-corn-bit-1-8-shank"
+    },
+    {
+      "id": "tin-coating-corn-bit-1-8-shank-1.4mm-7.5mm",
+      "name": "TiN Coating Corn Bit - 1/8″ Shank · 1.4mm * 7.5mm",
+      "kind": "flat",
+      "diameter": 1.4,
+      "length": 7.5,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-corn-bit-1-8-shank"
+    },
+    {
+      "id": "tin-coating-corn-bit-1-8-shank-1.5mm-8.5mm",
+      "name": "TiN Coating Corn Bit - 1/8″ Shank · 1.5mm * 8.5mm",
+      "kind": "flat",
+      "diameter": 1.5,
+      "length": 8.5,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-corn-bit-1-8-shank"
+    },
+    {
+      "id": "tin-coating-corn-bit-1-8-shank-1.6mm-8.5mm",
+      "name": "TiN Coating Corn Bit - 1/8″ Shank · 1.6mm * 8.5mm",
+      "kind": "flat",
+      "diameter": 1.6,
+      "length": 8.5,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-corn-bit-1-8-shank"
+    },
+    {
+      "id": "tin-coating-corn-bit-1-8-shank-1.7mm-9.5mm",
+      "name": "TiN Coating Corn Bit - 1/8″ Shank · 1.7mm * 9.5mm",
+      "kind": "flat",
+      "diameter": 1.7,
+      "length": 9.5,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-corn-bit-1-8-shank"
+    },
+    {
+      "id": "tin-coating-corn-bit-1-8-shank-1.8mm-9.5mm",
+      "name": "TiN Coating Corn Bit - 1/8″ Shank · 1.8mm * 9.5mm",
+      "kind": "flat",
+      "diameter": 1.8,
+      "length": 9.5,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-corn-bit-1-8-shank"
+    },
+    {
+      "id": "tin-coating-corn-bit-1-8-shank-1.9mm-9.5mm",
+      "name": "TiN Coating Corn Bit - 1/8″ Shank · 1.9mm * 9.5mm",
+      "kind": "flat",
+      "diameter": 1.9,
+      "length": 9.5,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-corn-bit-1-8-shank"
+    },
+    {
+      "id": "tin-coating-corn-bit-1-8-shank-2mm-10.5mm",
+      "name": "TiN Coating Corn Bit - 1/8″ Shank · 2mm * 10.5mm",
+      "kind": "flat",
+      "diameter": 2,
+      "length": 10.5,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-corn-bit-1-8-shank"
+    },
+    {
+      "id": "tin-coating-corn-bit-1-8-shank-2.1mm-10.5mm",
+      "name": "TiN Coating Corn Bit - 1/8″ Shank · 2.1mm * 10.5mm",
+      "kind": "flat",
+      "diameter": 2.1,
+      "length": 10.5,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-corn-bit-1-8-shank"
+    },
+    {
+      "id": "tin-coating-corn-bit-1-8-shank-2.4mm-10.5mm",
+      "name": "TiN Coating Corn Bit - 1/8″ Shank · 2.4mm * 10.5mm",
+      "kind": "flat",
+      "diameter": 2.4,
+      "length": 10.5,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-corn-bit-1-8-shank"
+    },
+    {
+      "id": "tin-coating-corn-bit-1-8-shank-2.5mm-10.5mm",
+      "name": "TiN Coating Corn Bit - 1/8″ Shank · 2.5mm * 10.5mm",
+      "kind": "flat",
+      "diameter": 2.5,
+      "length": 10.5,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-corn-bit-1-8-shank"
+    },
+    {
+      "id": "tin-coating-corn-bit-1-8-shank-3.0mm-12mm",
+      "name": "TiN Coating Corn Bit - 1/8″ Shank · 3.0mm * 12mm",
+      "kind": "flat",
+      "diameter": 3,
+      "length": 12,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-corn-bit-1-8-shank"
+    },
+    {
+      "id": "tin-coating-corn-bit-1-8-shank-3.175mm-12mm",
+      "name": "TiN Coating Corn Bit - 1/8″ Shank · 3.175mm * 12mm",
+      "kind": "flat",
+      "diameter": 3.175,
+      "length": 12,
+      "shank": 3.175,
+      "source": "https://www.makera.com/products/tin-coating-corn-bit-1-8-shank"
+    }
+  ],
+  "omitted": [
+    {
+      "product": "TiN Coating Drill Bit - 1/8″ Shank",
+      "spec": "0.2mm - 1.1mm",
+      "reason": "Assortment, not an individual tool"
+    },
+    {
+      "product": "TiN Coating Drill Bit - 1/8″ Shank",
+      "spec": "1.2mm - 2.1mm",
+      "reason": "Assortment, not an individual tool"
+    },
+    {
+      "product": "TiN Coating Drill Bit - 1/8″ Shank",
+      "spec": "2.2mm - 3.175mm",
+      "reason": "Assortment, not an individual tool"
+    },
+    {
+      "product": "TiN Coating Corn Bit - 1/8″ Shank",
+      "spec": "0.6mm - 1.5mm",
+      "reason": "Assortment, not an individual tool"
+    },
+    {
+      "product": "TiN Coating Corn Bit - 1/8″ Shank",
+      "spec": "1.5mm - 3.175mm",
+      "reason": "Assortment, not an individual tool"
+    }
+  ]
+}

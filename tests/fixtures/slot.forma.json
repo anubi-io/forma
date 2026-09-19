@@ -1,0 +1,22 @@
+{
+  "filename": "slot.nc",
+  "material": "aluminum",
+  "version": 1,
+  "code": "(Test program: 4 mm slot with arbitrary tool number)\nG21 G17 G90 G94\nT7 M6\nG0 X20 Y20 Z5\nG1 Z-3 F200\nG1 X70 F800\nG0 Z10\nM30\r\n",
+  "assignments": {
+    "7": {
+      "id": "custom-7",
+      "name": "Fresa test 4 mm",
+      "diameter": 4,
+      "length": 12,
+      "kind": "flat"
+    }
+  },
+  "stock": {
+    "origin": "corner",
+    "y": 70,
+    "z": 12,
+    "x": 100,
+    "zOrigin": "top"
+  }
+}

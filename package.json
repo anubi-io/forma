@@ -1,0 +1,54 @@
+{
+  "name": "forma",
+  "version": "1.0.0",
+  "description": "Local-first 3-axis CNC material removal preview",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "vitest run",
+    "test:gpu": "playwright test",
+    "catalog:update": "node scripts/update-catalog.mjs",
+    "brand:export": "node scripts/export-brand-assets.mjs",
+    "format": "prettier --write src tests scripts *.ts *.json *.md"
+  },
+  "keywords": [
+    "cnc",
+    "gcode",
+    "makera",
+    "carvera",
+    "simulation",
+    "webgpu"
+  ],
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "license": "MIT",
+  "type": "module",
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/three": "^0.186.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "fake-indexeddb": "^6.2.5",
+    "prettier": "^3.9.8",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.0",
+    "vitest": "^4.1.11"
+  },
+  "dependencies": {
+    "@fontsource/geist": "^5.3.0",
+    "@fontsource/geist-mono": "^5.3.0",
+    "@phosphor-icons/react": "^2.1.10",
+    "@radix-ui/react-tooltip": "^1.2.16",
+    "@react-three/drei": "^10.7.8",
+    "@react-three/fiber": "^9.7.0",
+    "fflate": "^0.8.3",
+    "react": "19.2",
+    "react-dom": "19.2",
+    "three": "^0.186.0",
+    "three-stdlib": "^2.36.1"
+  }
+}

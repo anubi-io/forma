@@ -1,0 +1,11 @@
+# Third-party sources
+
+The G-code lexer and interpreter are implemented in TypeScript in `src/engine`.
+
+Makera import interoperability was researched in the official [Carvera Controller loader](https://github.com/MakeraInc/CarveraController/blob/main/src/makera.py), [CNC interpreter](https://github.com/MakeraInc/CarveraController/blob/main/src/CNC.py), and [Carvera firmware QuickLZ format](https://github.com/MakeraInc/CarveraFirmware/blob/master/src/modules/utils/player/quicklz.c). The [codec fixture provenance](tests/fixtures/quicklz-reference.md) documents generated reference-compressed data; the [Makera Studio fixture](tests/fixtures/makera-studio.nc) identifies the official export example used as its format reference.
+
+Makera catalog dimensions and product URLs are factual data retrieved from the [public Makera product feed](https://www.makera.com/products.json) on the date stored in `src/data/makera.json`. Product and brand names belong to their owners. This project is independent of Makera. Pack-size duplicates and multi-size assortments are excluded. Unsupported cutter geometries are retained for reference but cannot be simulated. The catalog is not an official export of the Makera Studio tool library.
+
+Rendering uses Three.js, React Three Fiber, Drei and three-stdlib. UI uses React, Radix Tooltip, Phosphor icons and self-hosted Geist fonts. MKS archive import uses fflate. These packages and their transitive dependencies retain their respective licenses and notices in their npm distributions; the Forma license does not replace them. Preserve applicable notices when redistributing source or builds.
+
+Thread cutter diameters, reach, 60° included angle and reference pitches come from Makera's [1/8-inch thread milling bits](https://www.makera.com/products/thread-milling-bit-1-8-shank) and [6 mm thread milling bits](https://www.makera.com/products/thread-milling-bit-6mm-shank). The rotational single-form tooth is an idealization: the neck diameter is estimated as `diameter - 1.226869 × reference pitch` (with a positive lower bound), not a published Makera measurement. Custom tools can override the neck. MKS tools use explicit `pitch` and `threadAngle` metadata; no pitch is inferred from tool names.
