@@ -2,6 +2,21 @@ node_modules/
 dist/
 test-results/
 playwright-report/
+blob-report/
+coverage/
+.nyc_output/
+.vite/
+*.tsbuildinfo
+
+# Local scratch work, generated reports, and one-off audits
+.local/
+.cache/
+.tmp/
+tmp/
+/audits/
+/reports/
+/scripts/audit-*.mjs
+
 *.log
 .env
 .env.*

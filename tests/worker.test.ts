@@ -73,6 +73,27 @@ describe("simulation worker lifecycle", () => {
       surfaces[0].surface.removed,
     );
   });
+  it("applies configured G55 offsets to both faces and reparses when offsets change", () => {
+    const path = "T1 M6\nG54\nG0 X2 Y2 Z5\nG55\nG0 X2 Y2 Z5\nG1 Z-2\nX6";
+    const bottom = {
+      code: path,
+      filename: "bottom.nc",
+      firstSide: "top" as const,
+      flipAxis: "x" as const,
+    };
+    send({ type: "load", code: path, bottom, workOffsets: { 55: [10, 0, 0] } });
+    configure(1);
+    const initial = replies().find((r) => r.type === "program");
+    expect(initial?.type === "program" && initial.program.moves[13]).toBe(12);
+    expect(initial?.type === "program" && initial.program.moves[53]).toBe(12);
+    expect(replies().some((r) => r.type === "surface")).toBe(true);
+    scope.postMessage.mockClear();
+    send({ type: "load", code: path, bottom, workOffsets: { 55: [20, 0, 0] } });
+    configure(2, { gpu: true });
+    const updated = replies().find((r) => r.type === "program");
+    expect(updated?.type === "program" && updated.program.moves[13]).toBe(22);
+    expect(replies().some((r) => r.type === "preparedSequence")).toBe(true);
+  });
   it("prepares both faces for WebGPU and retains a cumulative CPU fallback", () => {
     send({
       type: "load",
@@ -100,6 +121,43 @@ describe("simulation worker lifecycle", () => {
     expect(start?.type === "surface" && start.surface.removed).toBe(0);
     expect(endVolume).toBeGreaterThan(0);
   });
+
+  it.each(["top", "bottom"])(
+    "shares the adapted grid when the %s path exceeds the index budget",
+    (side) => {
+      const dense =
+        "T1 M6\nG0 X20 Y20 Z5\n" +
+        Array.from({ length: 600 }, (_, i) => `G1 Z${-1 - i / 1000}`).join(
+          "\n",
+        );
+      send({
+        type: "load",
+        code: side === "top" ? dense : code,
+        bottom: {
+          code: side === "bottom" ? dense : code,
+          filename: "bottom.nc",
+          firstSide: "top",
+          flipAxis: "x",
+        },
+      });
+      configure(1, {
+        gpu: true,
+        resolution: 3200,
+        tools: { 1: { ...flat, diameter: 100 } },
+      });
+      const message = replies().at(-1);
+      expect(message?.type).toBe("preparedSequence");
+      if (message?.type !== "preparedSequence")
+        throw new Error("Missing adapted sequence");
+      const [first, second] = message.prepared.faces;
+      expect(first.nx).toBeLessThan(3200);
+      expect([first.nx, first.ny]).toEqual([second.nx, second.ny]);
+      expect(first.sx).toBe(second.sx);
+      expect(first.sy).toBe(second.sy);
+      expect(first.count + second.count).toBe(604);
+      expect(replies().some((r) => r.type === "error")).toBe(false);
+    },
+  );
 
   it("identifies bottom parse errors and never reuses the previous program", () => {
     send({ type: "load", code });

@@ -28,6 +28,50 @@ const name = () => `workspace-test-${++serial}`;
 afterEach(() => vi.restoreAllMocks());
 
 describe("local workspace persistence", () => {
+  it("round-trips custom XYZ origins and separate work zeros", async () => {
+    const db = name();
+    const custom: WorkspaceProject = {
+      ...project,
+      stock: {
+        ...project.stock,
+        origin: "custom",
+        originX: -12.5,
+        originY: 23,
+        zOrigin: "custom",
+        originZ: 17.5,
+        workOffsets: { 55: [25, -8, 2], 59.3: [0, 20, 0] },
+      },
+    };
+    expect(validProject(custom)).toBe(true);
+    await createWorkspaceStore(db).save(custom, view);
+    expect((await createWorkspaceStore(db).load())?.project.stock).toEqual(
+      custom.stock,
+    );
+    expect(validProject(JSON.parse(JSON.stringify(custom)))).toBe(true);
+    for (const change of [
+      { originX: undefined },
+      { originY: "12" },
+      { originZ: NaN },
+      { workOffsets: { 55: [0, 1] } },
+      { workOffsets: { 54: [1, 2, 3] } },
+    ])
+      expect(
+        validProject({ ...custom, stock: { ...custom.stock, ...change } }),
+      ).toBe(false);
+  });
+  it("accepts old backups and corner presets without custom fields", () => {
+    expect(validProject(project)).toBe(true);
+    for (const origin of [
+      "corner",
+      "center",
+      "front-right",
+      "back-left",
+      "back-right",
+    ])
+      expect(
+        validProject({ ...project, stock: { ...project.stock, origin } }),
+      ).toBe(true);
+  });
   it("restores both programs and rejects malformed flip settings", async () => {
     const store = createWorkspaceStore(name());
     const bottom = {

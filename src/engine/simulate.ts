@@ -6,6 +6,7 @@ import {
   type Surface,
 } from "../types";
 import { simulationGrid } from "./prepare";
+import { stockOrigin } from "./coordinates";
 
 export class Simulator {
   readonly heights: Float32Array;
@@ -85,9 +86,7 @@ export class Simulator {
     const { stock: s, nx, ny } = this,
       sx = s.x / nx,
       sy = s.y / ny;
-    const ox = s.origin === "center" ? s.x / 2 : 0,
-      oy = s.origin === "center" ? s.y / 2 : 0,
-      oz = s.zOrigin === "top" ? s.z : 0;
+    const [ox, oy, oz] = stockOrigin(s);
     const m = this.program.moves;
     for (let segment = this.processed; segment < target; segment++) {
       if (

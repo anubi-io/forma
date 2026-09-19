@@ -59,17 +59,17 @@ describe("Makera NC compatibility", () => {
     expect(p.tools).toEqual([1]);
     expect(p.moves.length / STRIDE).toBe(5);
     expect(Array.from(p.moves.slice(-7, -4))).toEqual([30, 10, 15]);
-    expect(p.warnings.join()).toContain("G28 homing excluded");
+    expect(p.warnings.join()).toContain("G28 clearance travel excluded");
     expect(p.toolChanges).toHaveLength(1);
   });
   it("supports program numbers and ignores line-number-only blocks", () => {
     expect(parseProgram("%\nO123\nN1\nG1 X10\nM02\n%").distance).toBe(10);
   });
-  it("requires complete absolute rapid re-anchoring after G28", () => {
+  it("requires all unknown axes to be restored before cutting after G28", () => {
     expect(() => parseProgram("G1 X5\nG28\nG1 X10")).toThrow(
       "position after G28",
     );
-    expect(() => parseProgram("G1 X5\nG28\nG0 X10 Y0")).toThrow(
+    expect(() => parseProgram("G1 X5\nG28\nG0 X10 Y0\nG1 Z-1")).toThrow(
       "position after G28",
     );
     const p = parseProgram("G1 X5\nG28\nG90 G0 X10 Y10 Z5\nG1 Z-1");
@@ -77,8 +77,8 @@ describe("Makera NC compatibility", () => {
     expect(Array.from(p.moves.slice(10, 16))).toEqual([10, 10, 5, 10, 10, -1]);
   });
   it.each([
-    "G28 X0",
-    "G53 G0 Z0",
+    "G28.3 X0",
+    "G53 G1 Z0",
     "G81 X0 Y0 Z-5",
     "M321",
     "G1 A90",

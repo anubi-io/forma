@@ -403,7 +403,7 @@ describe("G-code optimization analysis", () => {
 });
 
 describe("modal metadata and analytic cutter envelopes", () => {
-  it("records state changes on actual segments, including arcs and S on dwell blocks", () => {
+  it("records state changes on segments and keeps dwell S separate from RPM", () => {
     const p = parseProgram(
       "T1 M6\nG0 X10 Y10 Z3\nM3 S9000\nG1 Z-1 F120\nG2 X20 Y10 I5 J0\nM5\nG4 P1 S12000\nG1 X25\nM30\nM3 S1000",
     );
@@ -417,7 +417,7 @@ describe("modal metadata and analytic cutter envelopes", () => {
     expect(p.motionStates?.at(-1)).toMatchObject({
       moveIndex: p.moves.length / STRIDE - 1,
       spindle: "off",
-      rpm: 12000,
+      rpm: 9000,
     });
     expect(() => parseProgram("G1 X1 S-100")).toThrow(/spindle speed/);
   });

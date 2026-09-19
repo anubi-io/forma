@@ -2,17 +2,76 @@ import { describe, expect, it } from "vitest";
 import {
   prepareSimulation,
   BATCH_SIZE,
+  CUT_STRIDE,
   TILE_SIZE,
   tileStatistics,
 } from "../src/engine/prepare";
 import { parseProgram } from "../src/engine/parse";
 import { Simulator } from "../src/engine/simulate";
-import type { Stock, Tool } from "../src/types";
+import { STRIDE, type Stock, type Tool } from "../src/types";
 
 const stock: Stock = { x: 40, y: 30, z: 10, origin: "corner", zOrigin: "top" };
 const tool: Tool = { id: "flat", name: "flat", diameter: 3.175, kind: "flat" };
 
 describe("spatial compiler", () => {
+  it("automatically fits a dense path into memory without losing cuts or playback batches", () => {
+    const square = { ...stock, y: 40 };
+    const tools = { 1: { ...tool, diameter: 100 } };
+    const program = parseProgram(
+      "T1 M6\nG0 X20 Y20 Z5\n" +
+        Array.from({ length: 600 }, (_, i) => `G1 Z${-1 - i / 1000}`).join(
+          "\n",
+        ),
+    );
+    const prepared = prepareSimulation(program, square, tools, 5600);
+    expect(prepared.nx).toBeLessThan(5600);
+    expect(prepared.nx).toBeGreaterThanOrEqual(32);
+    expect(prepared.indices.length).toBeLessThanOrEqual(16_000_000);
+    expect(prepared.count).toBe(program.moves.length / STRIDE);
+    expect(prepared.cuts).toEqual(
+      prepareSimulation(program, square, tools, 32).cuts,
+    );
+    const tileCount = prepared.tilesX * prepared.tilesY;
+    const expectedCuts = Array.from({ length: 600 }, (_, i) => i + 1);
+    for (const tile of [0, Math.floor(tileCount / 2), tileCount - 1]) {
+      expect(
+        Array.from(
+          prepared.indices.subarray(
+            prepared.offsets[tile],
+            prepared.offsets[tile + 1],
+          ),
+        ),
+      ).toEqual(expectedCuts);
+    }
+    for (let segment = 1; segment < prepared.count; segment++)
+      expect(prepared.cuts[segment * CUT_STRIDE + 11]).toBe(1);
+    expect(Array.from(prepared.batchOffsets)).toEqual([
+      0,
+      tileCount,
+      tileCount * 2,
+    ]);
+    for (let batch = 0; batch < 2; batch++)
+      expect(
+        Array.from(
+          prepared.batchTiles.subarray(
+            batch * tileCount,
+            (batch + 1) * tileCount,
+          ),
+        ),
+      ).toEqual(Array.from({ length: tileCount }, (_, i) => i));
+  });
+
+  it("keeps the requested detail when the spatial index fits", () => {
+    const prepared = prepareSimulation(
+      parseProgram("T1 M6\nG0 X10 Y10 Z5\nG1 Z-2"),
+      stock,
+      { 1: tool },
+      3200,
+    );
+    expect(prepared.nx).toBe(3200);
+    expect(prepared.ny).toBe(2400);
+  });
+
   it("indexes every affected sample, including tile boundaries, diagonals and off-stock moves", () => {
     const paths = [
       "G0 X-5 Y-5 Z-2\nG1 X45 Y35",

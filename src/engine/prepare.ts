@@ -1,6 +1,7 @@
 import { STRIDE, type Assignments, type Program, type Stock } from "../types";
 import { MAX_RESOLUTION, MAX_GPU_RESOLUTION } from "./quality";
 import { validThread } from "./threadProfile";
+import { stockOrigin } from "./coordinates";
 import type { PreparedThreads } from "./prepareThreads";
 
 export const TILE_SIZE = 16;
@@ -36,6 +37,7 @@ export function simulationGrid(
   resolution: number,
   maximum = MAX_RESOLUTION,
 ) {
+  stockOrigin(stock);
   if (
     ![stock.x, stock.y, stock.z].every(
       (v) => Number.isFinite(v) && v > 0 && v <= 2000,
@@ -164,7 +166,7 @@ export function prepareSimulation(
   tools: Assignments,
   resolution: number,
 ): PreparedSimulation {
-  const { warnings: setupWarnings, ...grid } = simulationGrid(
+  let { warnings: setupWarnings, ...grid } = simulationGrid(
     stock,
     tools,
     program.tools,
@@ -173,20 +175,15 @@ export function prepareSimulation(
   );
   const count = program.moves.length / STRIDE;
   const cuts = new Float32Array(Math.max(1, count) * CUT_STRIDE);
-  const warnings = setupWarnings.map((message) => ({ at: 0, message }));
-  const seen = new Set(setupWarnings);
+  const warnings: PreparedSimulation["warnings"] = [];
+  const seen = new Set<string>();
   const warn = (at: number, message: string) => {
     if (!seen.has(message)) {
       seen.add(message);
       warnings.push({ at, message });
     }
   };
-  const ox = stock.origin === "center" ? stock.x / 2 : 0;
-  const oy = stock.origin === "center" ? stock.y / 2 : 0;
-  const oz = stock.zOrigin === "top" ? stock.z : 0;
-  const tileCount = grid.tilesX * grid.tilesY;
-  const counts = new Uint32Array(tileCount);
-  let references = 0;
+  const [ox, oy, oz] = stockOrigin(stock);
   const m = program.moves;
   for (let segment = 0; segment < count; segment++) {
     const i = segment * STRIDE,
@@ -264,23 +261,47 @@ export function prepareSimulation(
       ],
       k,
     );
-    // Expand for f32 coordinate rounding at tile boundaries; never omit an affected sample.
-    visitTiles(
-      cuts[k],
-      cuts[k + 1],
-      cuts[k] + cuts[k + 4],
-      cuts[k + 1] + cuts[k + 5],
-      cuts[k + 3] + epsilon,
-      grid,
-      (tile) => {
-        counts[tile]++;
-        if (++references > MAX_REFERENCES)
-          throw new Error(
-            "Toolpath spatial index exceeds the memory budget. Split the program or reduce quality.",
-          );
-      },
-    );
   }
+  // Keep all cuts and timeline indices. Only the surface sampling changes when
+  // a dense path needs more index memory than the portable GPU budget permits.
+  // Count before allocating the large buffers, and reuse the clipped cuts on retries.
+  let counts: Uint32Array;
+  let references: number;
+  for (;;) {
+    counts = new Uint32Array(grid.tilesX * grid.tilesY);
+    references = 0;
+    for (let segment = 0; segment < count; segment++) {
+      const k = segment * CUT_STRIDE;
+      if (!cuts[k + 11]) continue;
+      visitTiles(
+        cuts[k],
+        cuts[k + 1],
+        cuts[k] + cuts[k + 4],
+        cuts[k + 1] + cuts[k + 5],
+        cuts[k + 3] + Math.max(stock.x, stock.y) * 2e-7,
+        grid,
+        (tile) => {
+          counts[tile]++;
+          references++;
+        },
+      );
+      if (references > MAX_REFERENCES) break;
+    }
+    if (references <= MAX_REFERENCES) break;
+    const current = Math.max(grid.nx, grid.ny);
+    // At 32 cells there are at most nine tiles, so every parser-supported
+    // program (up to one million moves) fits even if every cut covers the stock.
+    if (current <= 32)
+      throw new Error("The program exceeds the supported simulation size.");
+    ({ warnings: setupWarnings, ...grid } = simulationGrid(
+      stock,
+      tools,
+      program.tools,
+      Math.max(32, Math.floor(current * 0.75)),
+      MAX_GPU_RESOLUTION,
+    ));
+  }
+  const tileCount = grid.tilesX * grid.tilesY;
   const offsets = new Uint32Array(tileCount + 1);
   for (let i = 0; i < tileCount; i++) offsets[i + 1] = offsets[i] + counts[i];
   const indices = new Uint32Array(Math.max(1, references));
@@ -337,7 +358,10 @@ export function prepareSimulation(
     indices,
     batchOffsets,
     batchTiles,
-    warnings,
+    warnings: [
+      ...setupWarnings.map((message) => ({ at: 0, message })),
+      ...warnings,
+    ],
   };
 }
 

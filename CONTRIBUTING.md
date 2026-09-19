@@ -48,7 +48,8 @@ Keep changes focused and format the files you touch with Prettier. Add a regress
 | `src/scene/`      | Viewport, surface rendering, materials, and part selection             |
 | `src/data/`       | Tool catalog, material presets, and built-in demo                      |
 | `src/components/` | Tool library, timeline, and optimization panel                         |
-| `src/App.tsx`     | Workspace UI and import/export                                         |
+| `src/App.tsx`     | App startup and workspace restoration                                  |
+| `src/workspace/`  | Workspace composition, state hooks, import/export and UI panels        |
 | `tests/`          | Unit tests and regression fixtures                                     |
 | `tests/browser/`  | Playwright browser and CPU/GPU comparison tests                        |
 

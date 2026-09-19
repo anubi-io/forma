@@ -76,6 +76,9 @@ export function lexLine(line: string): Word[] {
     if (!Number.isFinite(value) || Math.abs(value) > 1e7)
       throw new Error("value out of range.");
     words.push([letter, value]);
+    // Carvera message commands own the remainder of the line as text, even
+    // when it contains G-code-looking words or diagnostic macro expressions.
+    if (letter === "M" && [117, 118, 118.1].includes(value)) break;
   }
   return words;
 }

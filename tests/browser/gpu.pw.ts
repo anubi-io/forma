@@ -77,6 +77,32 @@ test("demo agrees with the CPU at its maximum resolution and restores checkpoint
   console.log("2,400-cell GPU/CPU:", JSON.stringify(result));
 });
 
+test("GPU automatically adapts an oversized index and preserves cuts through rewind", async ({
+  page,
+}) => {
+  const failures: string[] = [];
+  page.on("pageerror", (e) => failures.push(e.message));
+  page.on("console", (m) => {
+    if (m.type() === "error" && !m.text().includes("404"))
+      failures.push(m.text());
+  });
+  await page.goto("/tests/browser/harness.html");
+  await page.waitForFunction(() => !!window.gpuHarness);
+  const report = await page.evaluate(() => window.gpuHarness.maximumGrid(true));
+  expect(report.resolution).toBeLessThan(3200);
+  expect(report.references).toBeLessThanOrEqual(16_000_000);
+  const expectedHeights = [6, 10, 8, 8, 6];
+  for (const [i, result] of report.results.entries()) {
+    expect(result.heights).toEqual(Array(5).fill(expectedHeights[i]));
+    expect(result.removed).toBeCloseTo((10 - expectedHeights[i]) * 40 * 40, 1);
+    expect(result.count).toBe(603);
+  }
+  expect(report.results[0].processed).toBe(603);
+  expect(report.results[1].processed).toBe(0);
+  expect(report.results[4].processed).toBe(603);
+  expect(failures).toEqual([]);
+});
+
 test("GPU Ultra handles 31 million samples and more than 65,535 workgroups", async ({
   page,
 }) => {

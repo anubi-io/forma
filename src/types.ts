@@ -18,10 +18,22 @@ export interface Stock {
   x: number;
   y: number;
   z: number;
-  origin: "corner" | "center";
-  zOrigin: "top" | "bottom";
+  origin:
+    "corner" | "front-right" | "back-left" | "back-right" | "center" | "custom";
+  zOrigin: "top" | "bottom" | "custom";
+  /** Location of work zero in mm from the stock's front-left bottom corner. */
+  originX?: number;
+  originY?: number;
+  originZ?: number;
+  /** Optional separate work zeros, in mm relative to G54. G54 remains [0,0,0]. */
+  workOffsets?: WorkOffsets;
 }
+export const WORK_SYSTEMS = [54, 55, 56, 57, 58, 59, 59.1, 59.2, 59.3] as const;
+export type WorkSystem = (typeof WORK_SYSTEMS)[number];
+export type WorkOffsets = Partial<Record<WorkSystem, [number, number, number]>>;
 export interface Program {
+  /** Work systems used by this program, for setup labels. */
+  workSystems?: WorkSystem[];
   /** Modal cutting state, recorded only when it changes, indexed by segment. */
   motionStates?: MotionState[];
   operations?: Operation[];

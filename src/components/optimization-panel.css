@@ -297,38 +297,6 @@
   color: #888;
   font-size: 11px;
 }
-.optimization-method {
-  padding: 12px 16px;
-  border-top: 1px solid var(--border);
-  color: #81838b;
-}
-.optimization-method summary {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 10px;
-  cursor: pointer;
-  list-style: none;
-}
-.optimization-method summary::-webkit-details-marker {
-  display: none;
-}
-.optimization-method summary > svg:last-child {
-  margin-left: auto;
-}
-.optimization-method[open] summary > svg:last-child {
-  transform: rotate(90deg);
-}
-.optimization-method p,
-.optimization-method li {
-  margin-top: 8px;
-  font-size: 10px;
-  line-height: 1.6;
-}
-.optimization-method ul {
-  margin: 10px 0;
-  padding-left: 14px;
-}
 .optimization-footer {
   display: flex;
   align-items: center;

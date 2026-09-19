@@ -97,7 +97,9 @@ test("thread project imports, renders its cutter, persists and falls back withou
   await expect(quality).toHaveValue("320");
   await expect(threadSpacing).toBeVisible();
   await page.screenshot({ path: "test-results/thread-m5-workspace.png" });
-  await page.getByRole("button", { name: "Show cutter", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Show cutter", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
   await page.screenshot({ path: "test-results/thread-m5-cutter.png" });
   await page.reload();
   await expect(threads).toHaveAttribute("aria-pressed", "false");

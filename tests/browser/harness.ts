@@ -51,7 +51,7 @@ export async function compare(
   await renderer.init();
   if (!(renderer.backend instanceof WebGPUBackend))
     throw new Error("GPU regression requires an actual WebGPU backend.");
-  const program = parseProgram(code);
+  const program = parseProgram(code, { workOffsets: stock.workOffsets });
   const started = performance.now();
   const prepared = prepareSimulation(program, stock, tools, resolution);
   const preparedMs = performance.now() - started;
@@ -108,7 +108,7 @@ export function demo(resolution: number) {
 }
 
 /** Cross the WebGPU 65,535-workgroup boundary with an analytically known cut. */
-export async function maximumGrid() {
+export async function maximumGrid(dense = false) {
   const renderer = new WebGPURenderer();
   await renderer.init();
   const stock: Stock = {
@@ -119,23 +119,32 @@ export async function maximumGrid() {
     zOrigin: "top",
   };
   const prepared = prepareSimulation(
-    parseProgram("T1 M6\nG0 X20 Y20 Z5\nG1 Z-2"),
+    parseProgram(
+      "T1 M6\nG0 X20 Y20 Z5\nG1 Z-2" +
+        (dense
+          ? "\n" +
+            Array.from({ length: 600 }, (_, i) => `G1 X${19 + (i % 2)}`).join(
+              "\n",
+            ) +
+            "\nG1 Z-4"
+          : ""),
+    ),
     stock,
     { 1: { id: "face", name: "Face mill", kind: "flat", diameter: 100 } },
-    5600,
+    dense ? 3200 : 5600,
   );
   const gpu = new GpuSimulator(renderer, prepared);
   try {
     const results = [];
     const samples = (prepared.nx + 1) * (prepared.ny + 1);
-    for (const fraction of [1, 0, 1]) {
+    for (const fraction of dense ? [1, 0, 0.8, 0.3, 1] : [1, 0, 1]) {
       const result = await gpu.seek(fraction);
       const heights = [];
       for (const index of [
         0,
-        5600,
+        prepared.nx,
         Math.floor(samples / 2),
-        samples - 5601,
+        samples - prepared.nx - 1,
         samples - 1,
       ]) {
         heights.push(
@@ -150,12 +159,20 @@ export async function maximumGrid() {
         );
       }
       results.push({
+        processed: result!.processed,
+        count: result!.count,
         removed: result!.removed,
         heights,
         elapsed: result!.elapsed,
       });
     }
-    return { samples, workgroups: prepared.batchTiles.length, results };
+    return {
+      samples,
+      resolution: Math.max(prepared.nx, prepared.ny),
+      references: prepared.indices.length,
+      workgroups: prepared.batchTiles.length,
+      results,
+    };
   } finally {
     gpu.dispose();
     await renderer.dispose();

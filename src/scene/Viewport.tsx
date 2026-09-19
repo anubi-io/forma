@@ -8,8 +8,14 @@ import {
   useState,
 } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
-import { OrbitControls, GizmoHelper, GizmoViewcube, useGizmoContext } from "@react-three/drei";
+import {
+  OrbitControls,
+  GizmoHelper,
+  GizmoViewcube,
+  useGizmoContext,
+} from "@react-three/drei";
 import { alignCamera } from "./cameraAlignment";
+import { sceneOrigin } from "../engine/coordinates";
 import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import * as THREE from "three";
 import { WebGPURenderer, WebGPUBackend } from "three/webgpu";
@@ -67,7 +73,9 @@ function Paths({
         Math.max(0, Math.ceil(progress) - start) * 2,
       );
       if (progress > processed && processed < count) {
-        const positions = geometry.getAttribute("position") as THREE.BufferAttribute;
+        const positions = geometry.getAttribute(
+          "position",
+        ) as THREE.BufferAttribute;
         const vertex = processed * 2 + 1;
         const end = [
           positions.getX(vertex),
@@ -144,10 +152,11 @@ function Cutter({
     t = tools[cursor.tool];
   if (!t) return null;
   const r = t.diameter / 2;
+  const [ox, oz, oy] = sceneOrigin(stock);
   const p: [number, number, number] = [
-    cursor.position[0] + (stock.origin === "center" ? 0 : -stock.x / 2),
-    cursor.position[2] + (stock.zOrigin === "top" ? stock.z : 0),
-    -cursor.position[1] + (stock.origin === "center" ? 0 : stock.y / 2),
+    cursor.position[0] + ox,
+    cursor.position[2] + oz,
+    -cursor.position[1] + oy,
   ];
   const coneHeight =
     t?.kind === "v"
@@ -219,28 +228,35 @@ function Cutter({
     </group>
   );
 }
-function AlignedViewcube({ onDirection }: { onDirection: (direction: THREE.Vector3) => void }) {
+function AlignedViewcube({
+  onDirection,
+}: {
+  onDirection: (direction: THREE.Vector3) => void;
+}) {
   const { tweenCamera } = useGizmoContext();
-  return <GizmoViewcube
-    color="#ffffff"
-    hoverColor="#cbdcf4"
-    textColor="#25282d"
-    strokeColor="#73777e"
-    font="600 30px Geist, Arial, sans-serif"
-    onClick={(event) => {
-      event.stopPropagation();
-      // Edge and corner hitboxes store their direction in their local position.
-      const direction = event.object.position.lengthSq() > 0
-        ? event.object.position.clone()
-        : event.face!.normal.clone();
-      onDirection(direction);
-      tweenCamera(direction);
-      return null;
-    }}
-  />;
+  return (
+    <GizmoViewcube
+      color="#ffffff"
+      hoverColor="#cbdcf4"
+      textColor="#25282d"
+      strokeColor="#73777e"
+      font="600 30px Geist, Arial, sans-serif"
+      onClick={(event) => {
+        event.stopPropagation();
+        // Edge and corner hitboxes store their direction in their local position.
+        const direction =
+          event.object.position.lengthSq() > 0
+            ? event.object.position.clone()
+            : event.face!.normal.clone();
+        onDirection(direction);
+        tweenCamera(direction);
+        return null;
+      }}
+    />
+  );
 }
 function Scene(props: Props) {
-  const [isolated,setIsolated] = useState(false);
+  const [isolated, setIsolated] = useState(false);
   const controls = useRef<OrbitControlsImpl>(null),
     { camera, invalidate, size: canvasSize } = useThree();
   const size = Math.max(props.stock.x, props.stock.y, props.stock.z * 2);

@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { STRIDE, type Program, type Stock } from "../types";
+import { sceneOrigin } from "../engine/coordinates";
 
 export function toolpathGeometry(program: Program | undefined, stock: Stock) {
   const geometry = new THREE.BufferGeometry();
@@ -9,9 +10,7 @@ export function toolpathGeometry(program: Program | undefined, stock: Stock) {
   // Allocate packed buffers directly to avoid large temporary JS arrays.
   const positions = new Float32Array(count * 6);
   const colors = new Float32Array(count * 6);
-  const x = stock.origin === "center" ? 0 : -stock.x / 2;
-  const y = stock.origin === "center" ? 0 : stock.y / 2;
-  const z = stock.zOrigin === "top" ? stock.z : 0;
+  const [x, z, y] = sceneOrigin(stock);
   for (let n = 0; n < count; n++) {
     const i = n * STRIDE;
     const rapid = program.moves[i + 7] === 1;

@@ -69,6 +69,12 @@ export function sequenceProgram(
     operations,
     toolChanges,
     motionStates,
+    workSystems: [
+      ...new Set([
+        ...(top.workSystems ?? [54]),
+        ...(bottom.workSystems ?? [54]),
+      ]),
+    ],
     tools: [...new Set([...top.tools, ...bottom.tools])],
     lines: top.lines + bottom.lines,
     seconds,

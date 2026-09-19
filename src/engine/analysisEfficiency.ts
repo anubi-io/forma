@@ -6,6 +6,7 @@ import {
   type Stock,
 } from "../types";
 import type { AnalysisFinding } from "./analyze";
+import { stockOrigin } from "./coordinates";
 
 /** Diagnose expensive milling patterns from programmed motion. Time spent is
  * evidence, not recoverable time: no faster feed or replacement CAM is assumed. */
@@ -16,7 +17,7 @@ export function analyzeEfficiency(
 ): AnalysisFinding[] {
   const m = program.moves,
     count = m.length / STRIDE;
-  const top = stock.zOrigin === "top" ? 0 : stock.z;
+  const top = stock.z - stockOrigin(stock)[2];
   const groups = new Map<string, AnalysisFinding>();
   const operations = program.operations ?? [
     { side: "top" as const, start: 0, end: count },

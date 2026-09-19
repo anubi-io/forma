@@ -1,30 +1,81 @@
 import { lexLine, type Word } from "./lex";
+import { CARVERA_COMMANDS, unsupportedCarveraCommand } from "./carvera";
+import { validWorkOffsets } from "./coordinates";
 import {
   STRIDE,
+  WORK_SYSTEMS,
   type Program,
   type ToolChange,
   type MotionState,
+  type WorkSystem,
+  type WorkOffsets,
 } from "../types";
 
 const MAX_MOVES = 1_000_000;
+const AXES = ["X", "Y", "Z"];
 const SUPPORTED_G = new Set([
-  0, 1, 2, 3, 4, 17, 18, 19, 20, 21, 28, 40, 49, 54, 80, 90, 90.1, 91, 91.1, 94,
+  0,
+  1,
+  2,
+  3,
+  4,
+  10,
+  17,
+  18,
+  19,
+  20,
+  21,
+  28,
+  28.1,
+  28.2,
+  28.6,
+  40,
+  49,
+  53,
+  ...WORK_SYSTEMS,
+  80,
+  90,
+  90.1,
+  91,
+  91.1,
+  92.1,
+  92.2,
+  94,
+  98,
+  99,
 ]);
-export function parseProgram(text: string): Program {
+export function parseProgram(
+  text: string,
+  options: { workOffsets?: WorkOffsets } = {},
+): Program {
+  if (
+    options.workOffsets !== undefined &&
+    !validWorkOffsets(options.workOffsets)
+  )
+    throw new Error(
+      "Invalid work offsets: use XYZ in millimeters relative to G54.",
+    );
   let data = new Float64Array(4096 * STRIDE),
     size = 0;
   const used = new Set<number>(),
     warnings = new Set<string>();
   const toolChanges: ToolChange[] = [];
   const motionStates: MotionState[] = [];
+  const workSystems = new Set<WorkSystem>();
   let spindle: MotionState["spindle"] = "unknown";
   let rpm: number | null = null;
+  let feedOverride = 1,
+    spindleOverride = 1;
   let feedExplicit = false;
+  const positionKnown = [true, true, true];
+  let positionReason = "machine travel";
+  let workSystem: WorkSystem = 54;
+  let workMotionStarted = false;
+  let workOffset: [number, number, number] | undefined = [0, 0, 0];
   let p = [0, 0, 0],
     absolute = true,
     arcAbsolute = false,
     plane = 17,
-    positionKnown = true,
     scale = 1,
     motion = 0,
     feed = 600,
@@ -38,23 +89,37 @@ export function parseProgram(text: string): Program {
   function fail(message: string): never {
     throw new Error(`Line ${lineCount}: ${message}`);
   }
+  function currentOffset(): [number, number, number] {
+    return (
+      workOffset ??
+      fail(
+        `G${workSystem} needs an XYZ offset relative to G54. Add it under Stock → Work offsets.`,
+      )
+    );
+  }
   const add = (q: number[], rapid: boolean) => {
     const d = Math.hypot(q[0] - p[0], q[1] - p[1], q[2] - p[2]);
     if (!d) return;
     if (size / STRIDE >= MAX_MOVES)
       fail("1 million segment limit reached. Split the program.");
-    const dt = (d / (rapid ? 3000 : feed)) * 60;
+    if (!rapid && tool === -1)
+      fail(
+        "cutting move with no tool loaded (T-1). Select a tool with T/M6 first.",
+      );
+    // Carvera's M220 scales the planner's time base for feed moves and rapids.
+    const dt = (d / ((rapid ? 3000 : feed) * feedOverride)) * 60;
+    const effectiveRpm = rpm === null ? null : rpm * spindleOverride;
     const previous = motionStates.at(-1);
     if (
       !previous ||
       previous.spindle !== spindle ||
-      previous.rpm !== rpm ||
+      previous.rpm !== effectiveRpm ||
       previous.feedExplicit !== feedExplicit
     ) {
       motionStates.push({
         moveIndex: size / STRIDE,
         spindle,
-        rpm,
+        rpm: effectiveRpm,
         feedExplicit,
       });
     }
@@ -87,6 +152,12 @@ export function parseProgram(text: string): Program {
     const raw = text.slice(start, end);
     start = end + 1;
     lineCount++;
+    // The bundled controller diagnostics use echo as a console message.
+    // Other shell commands remain invalid NC input.
+    if (/^\s*echo(?:\s|$)/i.test(raw)) {
+      warnings.add("Controller messages are excluded from the preview.");
+      continue;
+    }
     let words: Word[];
     try {
       words = lexLine(raw);
@@ -95,28 +166,44 @@ export function parseProgram(text: string): Program {
     }
     if (!words.length) continue;
     const v: Record<string, number> = {};
+    const gCodes: number[] = [],
+      mCodes: number[] = [];
+    for (const [letter, value] of words) {
+      if (letter === "G") gCodes.push(value);
+      if (letter === "M") mCodes.push(value);
+    }
+    const specialCodes = mCodes.filter((value) => CARVERA_COMMANDS.has(value));
+    if (specialCodes.length > 1)
+      fail(
+        "multiple controller commands in one block are ambiguous; put each command on its own line.",
+      );
+    const controllerCode = specialCodes[0];
+    const controller = CARVERA_COMMANDS.get(controllerCode);
     let change = false,
       stop = false,
       dwell = false,
-      home = false;
+      home = false,
+      machineMove = false;
     for (const [letter, value] of words) {
-      if ("ABCUVW".includes(letter))
-        fail(
-          "rotary or auxiliary axes are not supported: 3-axis simulation only.",
-        );
-      if (!"GMTXYZIJKRFSNPHO".includes(letter))
-        fail(`unsupported word ${letter}.`);
       if (letter === "G" && !SUPPORTED_G.has(value))
         fail(
-          `G${value} is not supported. Use G54 without additional offsets and explicit toolpaths (no cycles or compensation).`,
+          unsupportedCarveraCommand(letter, value) ??
+            `G${value} is not supported. Use explicit 3-axis toolpaths (no cycles or compensation).`,
         );
-      if (letter === "M" && ![0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 30].includes(value))
-        fail(`M${value} is not supported.`);
+      if (
+        letter === "M" &&
+        !CARVERA_COMMANDS.has(value) &&
+        ![0, 1, 2, 3, 4, 5, 7, 8, 9, 30].includes(value)
+      )
+        fail(
+          unsupportedCarveraCommand(letter, value) ??
+            `M${value} is not supported.`,
+        );
       if (letter === "M") {
         if (value === 3) spindle = "cw";
         if (value === 4) spindle = "ccw";
         if (value === 5) spindle = "off";
-        if (value === 6) change = true;
+        if (value === 6 || value === 493.2) change = true;
         if (value === 2 || value === 30) stop = true;
       }
       if (letter === "G") {
@@ -130,20 +217,90 @@ export function parseProgram(text: string): Program {
         if (value <= 3) motion = value;
         if (value === 80) motion = -1;
         if (value === 4) dwell = true;
-        if (value === 28) home = true;
-        if (value === 54)
+        if (value === 28 || value === 28.2) home = true;
+        if (value === 53) machineMove = true;
+        if (WORK_SYSTEMS.includes(value as WorkSystem)) {
+          if (
+            options.workOffsets === undefined &&
+            workMotionStarted &&
+            value !== workSystem
+          )
+            fail(
+              `G${value} changes the work coordinate system after motion; the relative work offsets are not available in this file. Enable separate work offsets under Stock → Work offsets and enter the zeros relative to G54.`,
+            );
+          workSystem = value as WorkSystem;
+          workOffset =
+            options.workOffsets === undefined || workSystem === 54
+              ? [0, 0, 0]
+              : options.workOffsets[workSystem];
           warnings.add(
-            "G54: coordinates use the configured workpiece coordinate system.",
+            options.workOffsets === undefined
+              ? `G${value}: coordinates use the configured workpiece coordinate system.`
+              : `G${value}: using the configured offset relative to G54.`,
           );
+        }
       }
       if (letter !== "G" && letter !== "M" && letter in v)
         fail(`duplicate word ${letter} in the same block.`);
       v[letter] = value;
     }
+    const setup = gCodes.includes(10);
+    const storedHome = gCodes.includes(28.1);
+    const homeStatus = gCodes.includes(28.6);
+    const resetOffset = gCodes.includes(92.1) || gCodes.includes(92.2);
+    const nonMotion =
+      controller ||
+      dwell ||
+      setup ||
+      home ||
+      storedHome ||
+      homeStatus ||
+      resetOffset;
+    if (nonMotion && gCodes.some((g) => g <= 3 || g === 53))
+      fail(
+        "controller/setup commands and explicit motion must be in separate blocks.",
+      );
+    if (
+      Number(!!controller) +
+        Number(dwell) +
+        Number(setup) +
+        Number(home) +
+        Number(storedHome) +
+        Number(homeStatus) +
+        Number(resetOffset) >
+      1
+    )
+      fail(
+        "multiple parameter-owning commands in one block; put each command on its own line.",
+      );
+    if (controller && mCodes.some((m) => [3, 4, 5].includes(m)))
+      fail("spindle and controller commands must be in separate blocks.");
+    const parameters = controller
+      ? controller.parameters
+      : dwell
+        ? "PS"
+        : setup
+          ? "LPRXYZ"
+          : home
+            ? "XYZ"
+            : storedHome
+              ? "XY"
+              : homeStatus || resetOffset
+                ? ""
+                : "TXYZIJKRFS";
+    for (const letter of Object.keys(v)) {
+      if ("GMNO".includes(letter) || parameters.includes(letter)) continue;
+      if ("ABCUVW".includes(letter))
+        fail(
+          "rotary or auxiliary axes are not supported: 3-axis simulation only.",
+        );
+      fail(`unsupported word ${letter} in this block.`);
+    }
     if ("T" in v) {
-      if (v.T < 0 || !Number.isInteger(v.T)) fail("invalid tool number.");
+      if (v.T < -1 || !Number.isInteger(v.T)) fail("invalid tool number.");
+      // M493.5 sets the next tool; it must not activate an implicit first tool.
       selected = v.T;
-      if (!initialized) initialToolLine = lineCount;
+      if (!initialized && controllerCode !== 493.5) initialToolLine = lineCount;
     }
     if (change) {
       toolChanges.push({
@@ -156,35 +313,160 @@ export function parseProgram(text: string): Program {
       tool = selected;
       initialized = true;
     }
+    if (controller) {
+      if (controllerCode === 493.2 && !("T" in v))
+        fail("M493.2 requires a T number.");
+      if (
+        (controllerCode === 6 || controller.effect === "calibrate") &&
+        "R" in v &&
+        (!Number.isInteger(v.R) || v.R < 1)
+      )
+        fail("tool calibration repeat count R must be a positive integer.");
+      if (controllerCode === 6 && "C" in v && v.C !== 0 && v.C !== 1)
+        fail("M6 calibration flag C must be 0 or 1.");
+      if (
+        controllerCode === 6 &&
+        "S" in v &&
+        (!Number.isInteger(v.S) || v.S < 0 || v.S > 5)
+      )
+        fail("M6 collet selection S must be an integer from 0 to 5.");
+      if (
+        (controller.effect === "feed" || controller.effect === "rpm") &&
+        "S" in v
+      ) {
+        const maximum = controller.effect === "feed" ? 1000 : 300;
+        const percentage = Math.min(maximum, Math.max(10, v.S));
+        if (percentage !== v.S)
+          warnings.add(
+            `M${controllerCode}: override clamped to ${percentage}% (Carvera range 10–${maximum}%).`,
+          );
+        if (controller.effect === "feed") feedOverride = percentage / 100;
+        else spindleOverride = percentage / 100;
+      }
+      if (
+        controller.effect === "calibrate" ||
+        (controllerCode === 6 &&
+          (v.C === 1 ||
+            (v.C !== 0 && ("X" in v || "Y" in v || "Z" in v || "R" in v))))
+      ) {
+        // Calibration returns to the prior XY at machine clearance Z.
+        positionKnown[2] = false;
+        positionReason = `M${controllerCode}`;
+        spindle = "off";
+        warnings.add(
+          `M${controllerCode}: tool calibration travel and time are excluded; calibrated tool-tip coordinates are assumed.`,
+        );
+      }
+      if (controller.effect === "position") {
+        if (
+          (controllerCode === 496.5 || controllerCode === 496.6) &&
+          !("X" in v && "Y" in v)
+        )
+          fail(`M${controllerCode} requires both X and Y.`);
+        positionKnown.fill(false);
+        if (controllerCode === 496.2 || controllerCode === 496.5) {
+          const offset = currentOffset();
+          p[0] = offset[0] + (controllerCode === 496.2 ? 0 : v.X * scale);
+          p[1] = offset[1] + (controllerCode === 496.2 ? 0 : v.Y * scale);
+          positionKnown[0] = positionKnown[1] = true;
+        }
+        positionReason = `M${controllerCode}`;
+        warnings.add(
+          `M${controllerCode}: controller positioning excluded from toolpath and timing.`,
+        );
+      }
+      if (controller.effect === "pause")
+        warnings.add(
+          "Controller/operator pauses are excluded from time estimates.",
+        );
+      if (controller.effect === "accessory")
+        warnings.add(
+          "Controller accessories, messages and hardware checks are accepted without simulating their physical effects or time.",
+        );
+      if (stop) break;
+      continue;
+    }
     if ("F" in v) {
       feedExplicit = true;
       feed = v.F * scale;
       if (feed <= 0) fail("feed rate F must be positive.");
     }
-    if ("S" in v) {
+    if ("S" in v && !dwell) {
       if (v.S < 0) fail("spindle speed S cannot be negative.");
       rpm = v.S;
     }
     if (dwell) {
+      if ((v.P ?? 0) < 0 || (v.S ?? 0) < 0)
+        fail("G4 dwell duration cannot be negative.");
       warnings.add("G4 pauses are excluded from time estimates.");
       if (stop) break;
       continue;
     }
-    if ("P" in v || "H" in v)
-      fail("P/H parameters are not supported in this block.");
+    if (setup) {
+      if (workMotionStarted)
+        fail(
+          "G10 changes work offsets after motion. Set offsets before motion; runtime offset changes are not supported.",
+        );
+      if (
+        ![2, 20].includes(v.L) ||
+        !Number.isInteger(v.P) ||
+        v.P < 0 ||
+        v.P > 9
+      )
+        fail("G10 requires L2 or L20 and a work system P0–P9.");
+      if (v.P !== 0 && WORK_SYSTEMS[v.P - 1] !== workSystem)
+        fail("G10 must configure the selected work coordinate system.");
+      if ("R" in v && v.R !== 0)
+        fail("G10 work coordinate rotation is not supported.");
+      warnings.add(
+        "G10: initial work offset setup is accepted; preview coordinates use the configured stock origin. Machine offsets are not simulated.",
+      );
+      if (stop) break;
+      continue;
+    }
+    if (storedHome || homeStatus) {
+      warnings.add(
+        "G28 park-position storage/status does not change the preview path.",
+      );
+      if (stop) break;
+      continue;
+    }
+    if (resetOffset) {
+      if (stop) break;
+      continue;
+    }
     const coords = "X" in v || "Y" in v || "Z" in v;
     const arc = motion === 2 || motion === 3;
     if (home) {
-      // The machine's home position and work offset are not part of an NC file.
-      // Never reinterpret the controller's G28 move as a cut in work coordinates.
-      if (coords)
-        fail(
-          "G28 with intermediate axes is not supported: machine home position is unavailable.",
-        );
+      // Carvera G28 goes to configurable clearance, irrespective of XYZ words.
+      // Neither that position nor the work offset is available in an NC file.
       warnings.add(
-        `Line ${lineCount}: G28 homing excluded from toolpath and timing (home position unavailable).`,
+        `G${gCodes.includes(28.2) ? "28.2 homing" : "28 clearance travel"} excluded from toolpath and timing (machine/work offset unavailable).`,
       );
-      positionKnown = false;
+      for (let i = 0; i < 3; i++)
+        if (!gCodes.includes(28.2) || !coords || AXES[i] in v)
+          positionKnown[i] = false;
+      positionReason = gCodes.includes(28.2) ? "G28.2" : "G28";
+      if (stop) break;
+      continue;
+    }
+    if (machineMove) {
+      if (
+        motion !== 0 ||
+        !absolute ||
+        "I" in v ||
+        "J" in v ||
+        "K" in v ||
+        "R" in v
+      )
+        fail(
+          "G53 requires an absolute G0 rapid; machine-coordinate cutting cannot be placed in the workpiece without machine offsets.",
+        );
+      for (let i = 0; i < 3; i++) if (AXES[i] in v) positionKnown[i] = false;
+      if (coords) positionReason = "G53";
+      warnings.add(
+        "G53 machine-coordinate travel excluded from toolpath and timing (machine/work offset unavailable).",
+      );
       if (stop) break;
       continue;
     }
@@ -202,20 +484,21 @@ export function parseProgram(text: string): Program {
         tool = selected;
       }
       initialized = true;
+      workMotionStarted = true;
+      workSystems.add(workSystem);
+      const offset = currentOffset();
       const q = p.map((n, i) =>
-        ["X", "Y", "Z"][i] in v
-          ? v[["X", "Y", "Z"][i]] * scale + (absolute ? 0 : n)
-          : n,
+        AXES[i] in v ? v[AXES[i]] * scale + (absolute ? offset[i] : n) : n,
       );
-      if (!positionKnown) {
-        if (!(motion === 0 && absolute && "X" in v && "Y" in v && "Z" in v))
+      if (!positionKnown.every(Boolean)) {
+        if (!(motion === 0 && absolute))
           fail(
-            "position after G28 is unknown: use G90 G0 with explicit X, Y and Z before resuming.",
+            `position after ${positionReason} is unknown for ${AXES.filter((_, i) => !positionKnown[i]).join(", ")}: restore those axes with absolute G0 moves (one or more lines) before cutting or incremental motion.`,
           );
+        for (let i = 0; i < 3; i++) if (AXES[i] in v) positionKnown[i] = true;
         p = q;
-        positionKnown = true;
         warnings.add(
-          `Line ${lineCount}: rapid repositioning after G28 excluded from timing.`,
+          `Rapid repositioning after ${positionReason} excluded from toolpath and timing until work coordinates are restored.`,
         );
         if (stop) break;
         continue;
@@ -231,8 +514,8 @@ export function parseProgram(text: string): Program {
           fail("arc center is outside the selected plane.");
         if (arcAbsolute && !("R" in v) && !(cu in v && cw in v))
           fail(`G90.1 requires explicit ${cu} and ${cw} for the arc center.`);
-        let cx = (arcAbsolute ? 0 : p[u]) + (v[cu] ?? 0) * scale,
-          cy = (arcAbsolute ? 0 : p[w]) + (v[cw] ?? 0) * scale;
+        let cx = (arcAbsolute ? offset[u] : p[u]) + (v[cu] ?? 0) * scale,
+          cy = (arcAbsolute ? offset[w] : p[w]) + (v[cw] ?? 0) * scale;
         const clockwise = motion === 2;
         const sweepFor = (x: number, y: number) => {
           const a = Math.atan2(p[w] - y, p[u] - x),
@@ -298,6 +581,7 @@ export function parseProgram(text: string): Program {
     warnings.add("Moves without an explicit T number: assign a tool to T0.");
   return {
     moves: data.slice(0, size),
+    workSystems: [...workSystems],
     tools: [...used].sort((a, b) => a - b),
     toolChanges,
     motionStates,

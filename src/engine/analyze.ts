@@ -1,3 +1,4 @@
+import { stockOrigin } from "./coordinates";
 import {
   STRIDE,
   type Assignments,
@@ -243,9 +244,7 @@ export function analyzeProgram(
   let uncertain = new Uint8Array(upper.length);
   const previousUpper = new Float64Array(upper.length);
   const updatedAt = new Int32Array(upper.length).fill(-1);
-  const ox = stock.origin === "center" ? stock.x / 2 : 0;
-  const oy = stock.origin === "center" ? stock.y / 2 : 0;
-  const oz = stock.zOrigin === "top" ? stock.z : 0;
+  const [ox, oy, oz] = stockOrigin(stock);
   const m = program.moves,
     count = m.length / STRIDE;
   const ops = program.operations ?? [

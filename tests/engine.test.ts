@@ -58,7 +58,7 @@ describe("modal G-code interpreter", () => {
   it.each([
     "G81 X1 Z-5",
     "G92 X0",
-    "G55",
+    "G1 X1\nG55",
     "G41 D2",
     "G1 X1 A45",
     "M98 P100",

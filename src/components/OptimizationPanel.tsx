@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import {
-  ArrowRight,
   CaretLeft,
   CaretRight,
   CircleNotch,
@@ -194,7 +193,7 @@ export default function OptimizationPanel({
             ? `${optimizationCount} ${optimizationCount === 1 ? "optimization" : "optimizations"}`
             : clean
               ? "Looking good"
-              : "Checks limited";
+              : "Optimizations";
   const findings = filter === "optimizations" ? opportunities : warnings;
   useEffect(() => {
     if (open) closeButton.current?.focus();
@@ -323,6 +322,11 @@ export default function OptimizationPanel({
                       <p>No issues found.</p>
                     </div>
                   )}
+                  {!clean && !report.findings.length && (
+                    <div className="optimization-empty">
+                      <p>No suggestions.</p>
+                    </div>
+                  )}
                   {!!report.findings.length && (
                     <>
                       <div
@@ -367,39 +371,6 @@ export default function OptimizationPanel({
                       </div>
                     </>
                   )}
-                  <details className="optimization-method">
-                    <summary>
-                      <Info size={13} />
-                      {report.complete
-                        ? "About these estimates"
-                        : `${report.limitations.length} ${report.limitations.length === 1 ? "check" : "checks"} limited`}
-                      <ArrowRight size={12} />
-                    </summary>
-                    {report.limitations.length > 0 && (
-                      <ul>
-                        {report.limitations.map((limit) => (
-                          <li key={limit}>{limit}</li>
-                        ))}
-                      </ul>
-                    )}
-                    <p>
-                      Counts refer to machining operations, separated by rapids
-                      or tool changes. All occurrences are available using the
-                      arrows.
-                    </p>
-                    <p>
-                      Potentially optimizable time combines repeated paths,
-                      empty passes and inefficient re-entry passes. Overlapping
-                      segments count once, including across different findings.
-                      Actual savings depend on the revised CAM strategy.
-                    </p>
-                    <p>
-                      Entry checks use averaged motion and fresh-stock
-                      engagement. Review heuristics for{" "}
-                      {report.profile.material}; holders and fixtures are not
-                      modeled.
-                    </p>
-                  </details>
                 </>
               )
             )}
@@ -411,7 +382,7 @@ export default function OptimizationPanel({
                   {report.analyzedMoves.toLocaleString("en-US")} /{" "}
                   {report.totalMoves.toLocaleString("en-US")} segments
                 </span>
-                <strong>100% scanned</strong>
+                <strong>Finished</strong>
               </>
             ) : (
               <span>{pending ? "Analyzing locally" : "Local analysis"}</span>

@@ -16,7 +16,7 @@ async function load(page: Page, code: string, overrides = {}) {
     "Machining complete",
   );
   await expect(page.locator(".optimization-sr-status")).toHaveText(
-    /\d+ warnings?|\d+ optimizations?|Looking good|Checks limited/,
+    /\d+ warnings?|\d+ optimizations?|Looking good|^Optimizations$/,
   );
 }
 test.beforeEach(async ({ page }) => {
@@ -104,7 +104,12 @@ test("partial setup, changing input during analysis, both faces and narrow-scree
   await load(page, clean, {
     assignments: { 7: { ...fixture.assignments[7], kind: "unsupported" } },
   });
-  await expect(panel).toContainText("check limited");
+  await expect(panel).toContainText("No suggestions.");
+  await expect(panel).not.toContainText(
+    /checks? limited|analysis grid|Counts refer|Entry checks|Overlapping segments/,
+  );
+  await expect(page.locator(".optimization-sr-status")).toHaveText("Optimizations");
+  await expect(panel.locator(".optimization-happy")).toHaveCount(0);
   await expect(panel).not.toContainText("No issues found.");
   await load(page, repeated);
   await load(page, clean);
@@ -174,10 +179,38 @@ test("shows all 16 occurrences and navigates directly to the last one", async ({
   await panel.getByRole("button", { name: "Previous Repeated paths" }).click();
   await expect(occurrence).toHaveValue("14");
   await expect(page.locator(".playback-line")).toContainText("Line 92");
-  await expect(panel.locator(".optimization-footer")).toContainText(
-    "100% scanned",
-  );
+  await expect(panel.locator(".optimization-footer")).toContainText("Finished");
   await page.screenshot({ path: "test-results/analysis-sixteen.png" });
+});
+
+test("fine cutters do not expose internal grid diagnostics or hide real findings", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const setup = {
+    assignments: { 7: { ...fixture.assignments[7], diameter: 0.01 } },
+  };
+  await load(page, clean, setup);
+  const trigger = page.getByRole("button", { name: /^Open optimizations:/ });
+  await expect(trigger).toHaveText("Optimizations");
+  await expect(trigger).not.toHaveClass(/clear/);
+  await trigger.click();
+  const panel = page.getByRole("complementary", {
+    name: "Optimizations",
+    exact: true,
+  });
+  await expect(panel).toContainText("No suggestions.");
+  await expect(panel).not.toContainText(
+    /checks? limited|analysis grid|Counts refer|Entry checks|Overlapping segments|No issues found/,
+  );
+  await load(page, repeated, setup);
+  await expect(panel).toContainText("Cut below stock bottom");
+  await expect(panel).not.toContainText(
+    /checks? limited|analysis grid|Counts refer|Entry checks|Overlapping segments/,
+  );
+  await page.screenshot({
+    path: "test-results/analysis-without-diagnostics.png",
+  });
 });
 
 test("includes inefficient re-entry in the potential total and optimization tab", async ({

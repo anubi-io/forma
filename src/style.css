@@ -523,6 +523,56 @@ h1 > span {
   height: 6px;
   border: 1.5px solid #777;
   border-radius: 50%;
+  flex-shrink: 0;
+}
+.setup-help {
+  margin: 0 0 12px;
+  color: #737373;
+  font-size: 11px;
+  line-height: 1.55;
+}
+.origin-fields {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.work-offsets {
+  margin-top: 18px;
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+}
+.work-offsets summary {
+  cursor: pointer;
+  font-size: 11px;
+  color: #454545;
+}
+.work-offsets summary span {
+  float: right;
+  font-size: 10px;
+  color: #737373;
+}
+.work-offsets[open] summary {
+  margin-bottom: 16px;
+}
+.work-offset-row {
+  border: 0;
+  border-top: 1px solid var(--border);
+  padding: 12px 0;
+  min-width: 0;
+}
+.work-offset-row legend {
+  padding-right: 8px;
+  font: 11px var(--mono);
+}
+.add-work-offset {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.add-work-offset select {
+  min-width: 0;
+  flex: 1;
+  font-size: 11px;
 }
 .sidebar-bottom {
   height: 42px;

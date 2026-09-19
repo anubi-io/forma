@@ -184,13 +184,14 @@ export function useSimulation(
       type: "load",
       code,
       bottom,
+      workOffsets: stock.workOffsets,
     } satisfies SimulationRequest);
     return () => {
       worker.terminate();
       current.gpu?.dispose();
       if (session.current === current) session.current = null;
     };
-  }, [code, bottom]);
+  }, [code, bottom, stock.workOffsets]);
 
   useEffect(() => {
     const current = session.current;

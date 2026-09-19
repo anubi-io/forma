@@ -3,6 +3,7 @@ import { MATERIALS } from "./data/materials";
 import { SIMULATION_QUALITIES, DEFAULT_QUALITY } from "./engine/quality";
 import { validThread } from "./engine/threadProfile";
 import { upgradeCatalogThreads } from "./data/upgradeTools";
+import { validStockOrigin } from "./engine/coordinates";
 
 export interface CameraPose {
   position: [number, number, number];
@@ -56,8 +57,7 @@ export function validProject(p: unknown): p is WorkspaceProject {
     (p.setupSource !== undefined && typeof p.setupSource !== "string") ||
     !record(p.stock) ||
     !["x", "y", "z"].every((k) => inRange(p.stock[k], 0.1, 2000)) ||
-    !["corner", "center"].includes(p.stock.origin) ||
-    !["top", "bottom"].includes(p.stock.zOrigin) ||
+    !validStockOrigin(p.stock as Stock) ||
     !MATERIALS.some((m) => m.id === p.material) ||
     !record(p.assignments)
   )
@@ -85,8 +85,8 @@ export const DEFAULT_VIEW: WorkspaceView = {
   resolution: DEFAULT_QUALITY,
   fraction: 1,
   speed: 1,
-  showPath: false,
-  showTool: false,
+  showPath: true,
+  showTool: true,
   mode: "iso",
 };
 
@@ -109,8 +109,10 @@ export function restoreView(value: unknown): WorkspaceView {
       : DEFAULT_QUALITY,
     fraction: inRange(v.fraction, 0, 1) ? v.fraction : 1,
     speed: [1, 2, 5, 10].includes(v.speed) ? v.speed : 1,
-    showPath: v.showPath === true,
-    showTool: v.showTool === true,
+    showPath:
+      typeof v.showPath === "boolean" ? v.showPath : DEFAULT_VIEW.showPath,
+    showTool:
+      typeof v.showTool === "boolean" ? v.showTool : DEFAULT_VIEW.showTool,
     mode: ["iso", "top", "front"].includes(v.mode) ? v.mode : "iso",
     camera,
   };

@@ -4,6 +4,7 @@ import type {
   Stock,
   Surface,
   BottomSetup,
+  WorkOffsets,
 } from "../types";
 import {
   sequenceProgram,
@@ -21,7 +22,12 @@ import {
 } from "./prepare";
 
 export type SimulationRequest =
-  | { type: "load"; code: string; bottom?: BottomSetup }
+  | {
+      type: "load";
+      code: string;
+      bottom?: BottomSetup;
+      workOffsets?: WorkOffsets;
+    }
   | {
       type: "configure";
       revision: number;
@@ -68,11 +74,13 @@ self.onmessage = ({ data }: MessageEvent<SimulationRequest>) => {
       simulator = undefined;
       bottom = data.bottom;
       try {
-        program = parseProgram(data.code);
+        program = parseProgram(data.code, { workOffsets: data.workOffsets });
         if (bottom) {
           let bottomProgram: Program;
           try {
-            bottomProgram = parseProgram(bottom.code);
+            bottomProgram = parseProgram(bottom.code, {
+              workOffsets: data.workOffsets,
+            });
           } catch (error) {
             throw new Error(
               `BOTTOM: ${error instanceof Error ? error.message : String(error)}`,
@@ -97,7 +105,7 @@ self.onmessage = ({ data }: MessageEvent<SimulationRequest>) => {
       if (!program) throw new Error(loadError);
       if (data.gpu && bottom) {
         const operations = program.operations!;
-        const faces = operations.map((op) =>
+        let faces = operations.map((op) =>
           prepareSimulation(
             operationProgram(program!, op),
             data.stock,
@@ -105,6 +113,25 @@ self.onmessage = ({ data }: MessageEvent<SimulationRequest>) => {
             data.resolution,
           ),
         );
+        // Combining opposite faces requires identical sample coordinates.
+        // If either side adapts to a dense path, bring both to a shared grid.
+        while (
+          faces.some((p) => p.nx !== faces[0].nx || p.ny !== faces[0].ny)
+        ) {
+          const resolution = Math.min(
+            ...faces.map((p) => Math.max(p.nx, p.ny)),
+          );
+          faces = faces.map((p, i) =>
+            Math.max(p.nx, p.ny) === resolution
+              ? p
+              : prepareSimulation(
+                  operationProgram(program!, operations[i]),
+                  data.stock,
+                  data.tools,
+                  resolution,
+                ),
+          );
+        }
         const threads = data.threadsEnabled
           ? prepareThreads(
               program,

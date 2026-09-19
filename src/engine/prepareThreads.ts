@@ -6,6 +6,7 @@ import {
   type Stock,
 } from "../types";
 import { threadProfile } from "./threadProfile";
+import { stockOrigin } from "./coordinates";
 import {
   MAX_THREAD_TILES,
   THREAD_TILE,
@@ -69,9 +70,7 @@ export function prepareThreads(
   );
   const span = step * THREAD_TILE;
   const flipAt = program.operations?.[0].end ?? Infinity;
-  const ox = stock.origin === "center" ? stock.x / 2 : 0;
-  const oy = stock.origin === "center" ? stock.y / 2 : 0;
-  const oz = stock.zOrigin === "top" ? stock.z : 0;
+  const [ox, oy, oz] = stockOrigin(stock);
   const entries = new Map<string, { xyz: number[]; ranges: number[] }>();
   const cuts: number[] = [];
   let rangeCount = 0;

@@ -64,6 +64,14 @@ The static output is in `dist/`. Serve it at the root of a static website. WebGP
 
 MKS import reads project metadata, not the binary scene. It supports 3-axis projects in millimeters with rectangular stock and recognized cutter profiles. Unsupported or unverified profiles remain available in toolpath-only mode. Conflicting geometries for the same T number and invalid stock dimensions are rejected without applying a partial setup.
 
+### Work zero and Carvera tool changes
+
+In **Stock → Workpiece origin**, choose any stock corner, the center, or **Custom** for XY. Choose the top surface, bottom, or **Custom** for Z. Custom fields appear only when selected. X is measured rightward from the left edge, Y backward from the front edge, and Z upward from the bottom. Values are always in mm, including for inch G-code. Negative values and zeros outside the stock are allowed. These settings affect simulation, toolpath, cutter placement and analysis, and are saved in projects.
+
+`G55` is supported, along with `G54`–`G59.3`. A file using one work system uses the origin above. If the file switches between work zeros, open **Stock → Work offsets**, choose **Separate work zeros**, and add each extra system. Enter its zero's XYZ coordinates relative to G54, in mm: for example, G55 `[30, 0, 0]` places its zero 30 mm to the right of G54. G54 uses the stock origin. Unspecified offsets produce an actionable diagnostic; machine-stored offsets cannot be recovered from a normal NC file. Both faces share the configured table and re-establish it for each setup.
+
+Carvera automatic tool changes appear as `T2 M6` or `M6 T2`. Forma records the switch in the timeline and uses the cutter assigned to T2 for later cuts. A `T` number alone does not identify cutter geometry: import the matching MKS or assign it in **Tools**. Magazine motion, tool-length measurement and their duration are excluded; the preview assumes successful calibration.
+
 ### Two-sided machining
 
 After importing TOP, select **Add BOTTOM G-code**. In Operations, choose **TOP → BOTTOM** or **BOTTOM → TOP**, then a 180° flip around the stock center on **X** or **Y** (the default).
@@ -82,31 +90,32 @@ The floating review button opens **Optimizations**, with filters for time-saving
 
 Checks include repeated toolpaths, passes without material removal, repeated Z returns, rapid moves through remaining stock, cutting beyond stock bounds or flute reach, missing feed/spindle settings, and aggressive entries. Some warnings, such as cutting through the stock or beyond its XY edges, may be intentional.
 
-**Potentially optimizable time** is the deduplicated duration of flagged moves, not guaranteed savings. Forma does not rewrite your G-code. Analysis uses a separate stock approximation and material-dependent heuristics; **100% scanned** does not mean every geometry can be evaluated. Coverage limits are shown in the panel.
+**Potentially optimizable time** is the deduplicated duration of flagged moves, not guaranteed savings. Forma does not rewrite your G-code. Analysis uses a separate stock approximation and material-dependent heuristics. The panel shows actionable findings; internal coverage diagnostics are retained in the analysis report without appearing as machining warnings. An incomplete analysis does not receive the green “Looking good” state.
 
 ## Compatibility
 
-| Area                  | Support                                                                                                                            |
-| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| Input                 | Plain UTF-8 G-code, Makera QuickLZ 1.5 containers (non-streaming levels 1 and 3), `.forma.json` backups, and `.mks` setup metadata |
-| Linear moves          | `G0`, `G1`; rapid moves do not remove material                                                                                     |
-| Arcs                  | `G2`/`G3`, `G17`/`G18`/`G19`, I/J/K or R, negative R, and helical moves                                                            |
-| Units and coordinates | `G20`/`G21`, `G90`/`G91`, `G90.1`/`G91.1`, `G94`, and `G54` in the selected workpiece coordinate system                            |
-| Tools and spindle     | `T`/`M6`, `S`, `M3`/`M4`/`M5`; `M7`/`M8`/`M9` accepted                                                                             |
-| Program control       | `M2`/`M30` end the program; `M0`/`M1` do not simulate operator pauses; `G4` dwell is excluded from time estimates                  |
-| Cancellation codes    | `G40`, `G49`, `G80`; a new motion command is required after `G80`                                                                  |
-| Cutter removal        | Flat, ball-nose, and V profiles on CPU/WebGPU; supported thread mills on WebGPU only                                               |
-| Other tools           | Drill bits, tapered ball-nose cutters, and other special profiles use toolpath-only mode and do not contribute to removed volume   |
+| Area                  | Support                                                                                                                                                              |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Input                 | Plain UTF-8 G-code, Makera QuickLZ 1.5 containers (non-streaming levels 1 and 3), `.forma.json` backups, and `.mks` setup metadata                                   |
+| Linear moves          | `G0`, `G1`; rapid moves do not remove material                                                                                                                       |
+| Arcs                  | `G2`/`G3`, `G17`/`G18`/`G19`, I/J/K or R, negative R, and helical moves                                                                                              |
+| Units and coordinates | `G20`/`G21`, `G90`/`G91`, `G90.1`/`G91.1`, `G94`; `G54`–`G59.3` with configured relative offsets when switching systems; initial `G10 L2/L20` setup without rotation |
+| Tools and spindle     | `T`/`M6`, Carvera collet/calibration parameters, `M493.2`, `S`, `M3`/`M4`/`M5`; `M220` feed and `M223` RPM overrides                                                 |
+| Carvera accessories   | Coolant, vacuum, fans, lights, external outputs, collet controls, messages, waits and hardware checks                                                                |
+| Program control       | `M2`/`M30` end the program; `M0`/`M1` do not simulate operator pauses; `G4` dwell is excluded from time estimates                                                    |
+| Cancellation codes    | `G40`, `G49`, `G80`; a new motion command is required after `G80`                                                                                                    |
+| Cutter removal        | Flat, ball-nose, and V profiles on CPU/WebGPU; supported thread mills on WebGPU only                                                                                 |
+| Other tools           | Drill bits, tapered ball-nose cutters, and other special profiles use toolpath-only mode and do not contribute to removed volume                                     |
 
-**G28 handling:** homing without axis coordinates is reported and excluded from the path and timing. Continuing afterward requires an explicit `G90 G0` reposition with X, Y, and Z; that transfer is also excluded. `G28` with intermediate axis coordinates is rejected.
+**G28 and machine travel:** Carvera `G28` moves to a configurable machine clearance position, not a fixed workpiece coordinate. That travel and absolute `G53 G0` moves are reported and excluded from the path and timing. Restore the affected axes with absolute rapid moves before cutting: `G0 X… Y…` followed by `Z…` is supported. These return moves are excluded until the work position is known. `G28.2` homing, Carvera `M496` positioning and `M491` calibration use the same recovery rules. No machine-to-work offset is guessed.
 
-**Not supported:** rotary axes, 4/5-axis machining, turning, general undercuts or side machining, canned cycles such as `G81`, macros, subroutines, multiple work offsets, `G53`, `G41`/`G42`/`G43`, and `G92`. Unknown instructions stop the preview and report the line number.
+**Not supported:** rotary axes, 4/5-axis machining, turning, general undercuts or side machining, canned cycles such as `G81`, executable macros, subroutines, runtime offset changes with `G10`, machine-coordinate cutting, `G41`/`G42`/`G43`, `G92` offset changes, laser machining and operations that require live probe results. Unknown instructions stop the preview and report the line number.
 
 ### Accuracy and practical limits
 
 - Surface and volume are grid approximations. Check the displayed grid spacing; features smaller than it are not reliable. Arc interpolation has a maximum chord error of 0.02 mm.
 - Quality ranges from **Draft** to **Ultra-detailed**, with **Detailed** as the default. Resolution depends on the active backend and device limits. Higher settings use more memory and may take longer.
-- Playback advances by segments, not real machine time. Time estimates use programmed feed and an assumed rapid speed of 3,000 mm/min, without acceleration, dwell, or tool-change time. Missing feed uses 600 mm/min and produces a warning.
+- Playback advances by segments, not real machine time. Time estimates use programmed feed and an assumed rapid speed of 3,000 mm/min, both scaled by Carvera `M220`, without acceleration, dwell, machine-clearance travel or tool-change time. `M223` scales RPM used by program review. Missing feed uses 600 mm/min and produces a warning.
 - Material settings affect appearance and review heuristics. Forma does not model cutting forces, deflection, or certified feeds and speeds.
 - Each G-code file is limited to **25 MB**, including decompressed input. Project backups are limited to **55 MB**. MKS archives are limited to **25 MB**, with **4 MB** of expanded metadata. Programs are limited to one million movement segments; device and simulation budgets may impose additional limits.
 
