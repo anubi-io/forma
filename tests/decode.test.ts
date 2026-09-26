@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { decodeNc } from "../src/engine/decode";
+import {
+  PROGRAM_LIMIT_BYTES,
+  PROJECT_LIMIT_BYTES,
+} from "../src/engine/importLimits";
 import fixtures from "./fixtures/quicklz-reference.json";
 
 const bytes = (hex: string) =>
@@ -61,7 +65,10 @@ describe("Makera NC import", () => {
 
   it("checks the expanded size before allocating a compressed block", () => {
     const packed = bytes("000000094f09000000010090010000");
-    expect(() => decodeNc(packed)).toThrow(/25 MB/);
+    new DataView(packed.buffer).setUint32(9, PROGRAM_LIMIT_BYTES + 1, true);
+    expect(() => decodeNc(packed)).toThrow(/100 MB/);
+    new DataView(packed.buffer).setUint32(9, PROJECT_LIMIT_BYTES + 1, true);
+    expect(() => decodeNc(packed, PROJECT_LIMIT_BYTES)).toThrow(/256 MB/);
   });
 
   it("applies the size limit to the sum of decoded blocks", () => {
@@ -70,8 +77,20 @@ describe("Makera NC import", () => {
       packed = new Uint8Array(first.length + second.length);
     packed.set(first);
     packed.set(second, first.length);
-    // The second block advertises exactly 25 MB, exceeding the remaining budget.
-    expect(() => decodeNc(packed)).toThrow(/25 MB/);
+    // The second block alone fits, but the sum exceeds the remaining budget.
+    new DataView(packed.buffer).setUint32(
+      first.length + 9,
+      PROGRAM_LIMIT_BYTES,
+      true,
+    );
+    expect(() => decodeNc(packed)).toThrow(/100 MB/);
+  });
+  it("accepts a 50 MB text program", () => {
+    const program = new Uint8Array(50 * 1024 * 1024).fill(32);
+    program.set(new TextEncoder().encode("G21 G90\nG1 X10 F100\n"));
+    const decoded = decodeNc(program);
+    expect(decoded.length).toBe(program.length);
+    expect(decoded.startsWith("G21 G90\nG1 X10 F100\n")).toBe(true);
   });
 
   it("reports unsupported streaming and binary text clearly", () => {

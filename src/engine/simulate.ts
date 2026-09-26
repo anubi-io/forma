@@ -7,6 +7,8 @@ import {
 } from "../types";
 import { simulationGrid } from "./prepare";
 import { stockOrigin } from "./coordinates";
+import { contactRadius, cutterRadius, taperedBall } from "./cutterProfile";
+import { analysisSweep } from "./analysisSweep";
 
 export class Simulator {
   readonly heights: Float32Array;
@@ -120,15 +122,16 @@ export class Simulator {
       }
       if (Math.min(az, bz) >= s.z) continue;
       const tool = this.tools[m[i + 6]],
-        r = tool.diameter / 2;
+        r = cutterRadius(tool);
       if (tool.kind === "unsupported" || tool.kind === "thread") continue;
       if (Math.min(az, bz) < 0)
         this.warnings.add("The toolpath extends below the stock bottom.");
+      const edgeRadius = contactRadius(tool, s.z - Math.min(az, bz));
       if (
-        Math.min(ax, bx) - r < 0 ||
-        Math.max(ax, bx) + r > s.x ||
-        Math.min(ay, by) - r < 0 ||
-        Math.max(ay, by) + r > s.y
+        Math.min(ax, bx) - edgeRadius < 0 ||
+        Math.max(ax, bx) + edgeRadius > s.x ||
+        Math.min(ay, by) - edgeRadius < 0 ||
+        Math.max(ay, by) + edgeRadius > s.y
       )
         this.warnings.add(
           "Part of the cutter extends beyond the stock XY bounds.",
@@ -145,6 +148,9 @@ export class Simulator {
         tipRadius = (tool.tip ?? 0) / 2,
         coneSlope =
           tool.kind === "v" ? 1 / Math.tan((tool.angle! * Math.PI) / 360) : 0;
+      const taperSweep = taperedBall(tool)
+        ? analysisSweep(ax, ay, az, bx, by, bz, tool)
+        : undefined;
       const minY = Math.max(0, Math.ceil((Math.min(ay, by) - r) / sy)),
         maxY = Math.min(ny, Math.floor((Math.max(ay, by) + r) / sy));
       for (let y = minY; y <= maxY; y++) {
@@ -224,7 +230,9 @@ export class Simulator {
                 ? r - Math.sqrt(Math.max(0, r * r - d2))
                 : Math.max(0, Math.sqrt(d2) - tipRadius) * coneSlope;
           }
-          const h = Math.fround(Math.max(0, height));
+          const h = Math.fround(
+            Math.max(0, taperSweep ? taperSweep(px, py) : height),
+          );
           if (h < oldHeight) {
             this.heights[index] = h;
             this.removed +=

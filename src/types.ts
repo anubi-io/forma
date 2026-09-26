@@ -6,6 +6,8 @@ export interface Tool {
   diameter: number;
   length?: number;
   angle?: number;
+  /** Included taper angle for ball engraving cutters; diameter is the ball diameter. */
+  taperAngle?: number;
   tip?: number;
   shank?: number;
   /** Single-form thread cutter: nominal pitch sizes the idealized tooth. */

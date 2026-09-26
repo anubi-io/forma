@@ -1,4 +1,5 @@
 import type { Tool } from "../types";
+import { cutterRadius, taperedBall, taperProfile } from "./cutterProfile";
 
 /** Continuous swept envelope, using the same flat/ball/V geometry as Simulator.
  * Infinity means the sample is outside the cutter. No stepping along the path. */
@@ -15,7 +16,8 @@ export function analysisSweep(
     dy = by - ay,
     dz = bz - az;
   const l2 = dx * dx + dy * dy;
-  const r = tool.diameter / 2,
+  const taper = taperedBall(tool) ? taperProfile(tool) : undefined;
+  const r = cutterRadius(tool),
     r2 = r * r;
   const tipRadius = (tool.tip ?? 0) / 2;
   const slope =
@@ -31,6 +33,39 @@ export function analysisSweep(
     const lo = Math.max(0, t0 - half),
       hi = Math.min(1, t0 + half);
     if (lo > hi) return Infinity;
+    if (taper) {
+      const { radius, slope, join, offset } = taper;
+      const heightAt = (t: number) => {
+        t = Math.max(lo, Math.min(hi, t));
+        const d = Math.hypot(ux - dx * t, uy - dy * t);
+        return (
+          az +
+          dz * t +
+          (d <= join
+            ? radius - Math.sqrt(Math.max(0, radius * radius - d * d))
+            : d * slope - offset)
+        );
+      };
+      let h = Math.min(heightAt(lo), heightAt(hi));
+      if (l2 > 1e-16) {
+        if (perp2 <= radius * radius)
+          h = Math.min(
+            h,
+            heightAt(
+              t0 -
+                (dz * Math.sqrt(Math.max(0, radius * radius - perp2))) /
+                  Math.sqrt(l2 * (l2 + dz * dz)),
+            ),
+          );
+        const slope2 = slope * slope * l2;
+        if (dz * dz < slope2)
+          h = Math.min(
+            h,
+            heightAt(t0 - dz * Math.sqrt(perp2 / (l2 * (slope2 - dz * dz)))),
+          );
+      }
+      return h;
+    }
     let t = dz < 0 ? hi : lo;
     if (tool.kind === "ball" && l2 > 1e-16)
       t = Math.max(

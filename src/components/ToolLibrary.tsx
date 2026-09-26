@@ -409,7 +409,13 @@ export default function ToolLibrary({
                   </p>
                   <dl>
                     <div>
-                      <dt>Cutting diameter</dt>
+                      <dt>
+                        {selected.taperAngle !== undefined
+                          ? "Ball diameter"
+                          : selected.kind === "v"
+                            ? "Maximum cutting diameter"
+                            : "Cutting diameter"}
+                      </dt>
                       <dd>{format(selected.diameter)}</dd>
                     </div>
                     <div>
@@ -424,6 +430,12 @@ export default function ToolLibrary({
                       <div>
                         <dt>Included angle</dt>
                         <dd>{format(selected.angle, "°")}</dd>
+                      </div>
+                    )}
+                    {selected.taperAngle !== undefined && (
+                      <div>
+                        <dt>Included taper angle</dt>
+                        <dd>{format(selected.taperAngle, "°")}</dd>
                       </div>
                     )}
                     {selected.tip !== undefined && (

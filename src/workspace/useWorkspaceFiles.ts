@@ -8,6 +8,7 @@ import {
 } from "../data/demo";
 import { DEFAULT_QUALITY } from "../engine/quality";
 import { readImport } from "../engine/importFile";
+import { PROGRAM_LIMIT_MB, PROJECT_LIMIT_MB } from "../engine/importLimits";
 import { download } from "./download";
 import type { WorkspaceProjectState } from "./useWorkspaceProject";
 import type { WorkspaceViewState } from "./useWorkspaceView";
@@ -97,8 +98,13 @@ export function useWorkspaceFiles(
     setImportState(null);
     setFileError("");
     setPlaying(false);
-    const limit = file.name.toLowerCase().endsWith(".json") ? 55 : 25;
-    if (file.size > limit * 1024 * 1024) {
+    const limit = file.name.toLowerCase().endsWith(".json")
+      ? PROJECT_LIMIT_MB
+      : PROGRAM_LIMIT_MB;
+    if (
+      !file.name.toLowerCase().endsWith(".mks") &&
+      file.size > limit * 1024 * 1024
+    ) {
       setFileError(
         `The file limit is ${limit} MB. Split the program into smaller operations.`,
       );
@@ -195,8 +201,8 @@ export function useWorkspaceFiles(
       filename: file.name,
     });
     try {
-      if (file.size > 25 * 1024 * 1024)
-        throw new Error("The file limit is 25 MB.");
+      if (file.size > PROGRAM_LIMIT_MB * 1024 * 1024)
+        throw new Error(`The file limit is ${PROGRAM_LIMIT_MB} MB.`);
       const bytes = new Uint8Array(await file.arrayBuffer());
       if (revision !== importRevision.current) return;
       setImportState({

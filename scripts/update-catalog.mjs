@@ -1,4 +1,17 @@
 import { mkdir, writeFile } from "node:fs/promises";
+import { unzipSync } from "fflate";
+const engravingProfileSource =
+  "https://raw.githubusercontent.com/MakeraInc/CarveraProfiles/de08a657bdc9c230a094dbdba792acd70bfcdf32/CAM_Post_Processors/Fusion360-profiles/Tool%20Files/Makera%20Engraving%20Bits.tools";
+const profileResponse = await fetch(engravingProfileSource);
+if (!profileResponse.ok)
+  throw new Error(`Tool profiles HTTP ${profileResponse.status}`);
+const engravingProfiles = JSON.parse(
+  new TextDecoder().decode(
+    unzipSync(new Uint8Array(await profileResponse.arrayBuffer()))[
+      "tools.json"
+    ],
+  ),
+).data;
 const products = [];
 for (let page = 1; page <= 10; page++) {
   const response = await fetch(
@@ -39,6 +52,7 @@ for (const p of products) {
       diameter = shank,
       length,
       angle,
+      taperAngle,
       tip,
       pitch,
       neck,
@@ -56,6 +70,19 @@ for (const p of products) {
       kind = "v";
       angle = +engraving[1];
       tip = +engraving[2];
+      const profile = engravingProfiles.find(
+        (t) =>
+          new URL(t["product-link"]).pathname === `/products/${p.handle}` &&
+          t.geometry.SFDM === shank &&
+          t.geometry.TA * 2 === angle &&
+          t.geometry["tip-diameter"] === tip,
+      );
+      if (profile) {
+        diameter = profile.geometry.DC;
+        length = profile.geometry.LCF;
+        note =
+          "Cutting dimensions from Makera CarveraProfiles; angle is the full included angle.";
+      }
     }
     if (/Chamfer/.test(p.title)) {
       kind = "v";
@@ -107,7 +134,19 @@ for (const p of products) {
       if (!tipSpec) throw new Error(`Missing tip diameter: ${p.title}`);
       diameter = tip = +tipSpec[1];
     }
-    if (/Coating Drill|Ball Nose Engraving|Solder Mask/.test(p.title)) {
+    if (/Ball Nose Engraving/.test(p.title)) {
+      const rows = [...p.body_html.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)];
+      const row = rows
+        .map((r) => r[1].replace(/<[^>]*>/g, " ").replace(/&nbsp;/g, " "))
+        .find((r) => r.includes(spec));
+      taperAngle = Number(row?.match(/(\d+(?:\.\d+)?)[°º]/)?.[1]);
+      if (!(taperAngle > 0 && taperAngle < 180))
+        throw new Error(`Missing ball taper: ${spec}`);
+      kind = "ball";
+      note =
+        "Tapered ball nose: diameter is the ball diameter; published included taper angle and cutting length.";
+    }
+    if (/Coating Drill|Solder Mask/.test(p.title)) {
       kind = "unsupported";
       note =
         "Special profile or incomplete geometry: listed in the catalog, but material removal is not supported by the current engine.";
@@ -133,6 +172,7 @@ for (const p of products) {
       diameter,
       length,
       angle,
+      taperAngle,
       tip,
       pitch,
       neck,

@@ -326,7 +326,16 @@ describe("mesh and catalog", () => {
       const result = s.seek(1);
       expect(result.removed).toBeGreaterThan(35000);
       expect(result.removed).toBeLessThan(37000);
-      expect(result.warnings).toEqual([]);
+      // Published flute length and the fine engraving tip now expose these
+      // conservative warnings even though earlier tools have cleared cavities.
+      expect(result.warnings).toContain(
+        "T3: depth exceeds the specified cutting length.",
+      );
+      expect(
+        result.warnings.every((w) =>
+          /T3: (tip diameter|depth exceeds)/.test(w),
+        ),
+      ).toBe(true);
       console.info(
         `Demo ${quality}: ${result.count} segments, ${result.elapsed.toFixed(1)} ms, ${(result.removed / 1000).toFixed(2)} cm3`,
       );

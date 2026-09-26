@@ -16,6 +16,11 @@ import {
 } from "@react-three/drei";
 import { alignCamera } from "./cameraAlignment";
 import { sceneOrigin } from "../engine/coordinates";
+import {
+  contactRadius,
+  taperedBall,
+  taperProfile,
+} from "../engine/cutterProfile";
 import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import * as THREE from "three";
 import { WebGPURenderer, WebGPUBackend } from "three/webgpu";
@@ -137,6 +142,33 @@ function ThreadCutter({ tool, length }: { tool: Tool; length: number }) {
     </mesh>
   );
 }
+function TaperedBallCutter({ tool }: { tool: Tool }) {
+  const points = useMemo(() => {
+    const radius = tool.diameter / 2;
+    const joinHeight =
+      radius * (1 - Math.sin((tool.taperAngle! * Math.PI) / 360));
+    const points = Array.from({ length: 25 }, (_, i) => {
+      const h = (joinHeight * i) / 24;
+      return new THREE.Vector2(contactRadius(tool, h), h);
+    });
+    const p = taperProfile(tool);
+    const shoulder = Math.min(
+      tool.length!,
+      (tool.shank! / 2) * p.slope - p.offset,
+    );
+    points.push(new THREE.Vector2(contactRadius(tool, shoulder), shoulder));
+    points.push(
+      new THREE.Vector2(contactRadius(tool, tool.length!), tool.length!),
+    );
+    return points;
+  }, [tool]);
+  return (
+    <mesh>
+      <latheGeometry args={[points, 48]} />
+      <meshStandardMaterial color="#bcc4cc" metalness={0.7} roughness={0.3} />
+    </mesh>
+  );
+}
 function Cutter({
   program,
   stock,
@@ -165,7 +197,10 @@ function Cutter({
           (r - (t.tip ?? 0) / 2) / Math.tan(((t.angle ?? 60) * Math.PI) / 360),
         )
       : 0;
-  const length = t?.kind === "v" ? coneHeight : Math.max(r, t?.length ?? 14);
+  const length =
+    t?.kind === "v"
+      ? Math.max(coneHeight, t.length ?? 0)
+      : Math.max(r, t?.length ?? 14);
   return (
     <group position={p}>
       <mesh position={[0, length + 7, 0]}>
@@ -185,6 +220,8 @@ function Cutter({
       </mesh>
       {t.kind === "thread" ? (
         <ThreadCutter tool={t} length={length} />
+      ) : taperedBall(t) ? (
+        <TaperedBallCutter tool={t} />
       ) : t?.kind === "ball" ? (
         <>
           <mesh position={[0, r, 0]}>
@@ -207,14 +244,26 @@ function Cutter({
           </mesh>
         </>
       ) : t?.kind === "v" ? (
-        <mesh position={[0, length / 2, 0]}>
-          <cylinderGeometry args={[r, (t.tip ?? 0) / 2, length, 20]} />
-          <meshStandardMaterial
-            color="#bcc4cc"
-            metalness={0.7}
-            roughness={0.3}
-          />
-        </mesh>
+        <group>
+          <mesh position={[0, coneHeight / 2, 0]}>
+            <cylinderGeometry args={[r, (t.tip ?? 0) / 2, coneHeight, 20]} />
+            <meshStandardMaterial
+              color="#bcc4cc"
+              metalness={0.7}
+              roughness={0.3}
+            />
+          </mesh>
+          {length > coneHeight && (
+            <mesh position={[0, (length + coneHeight) / 2, 0]}>
+              <cylinderGeometry args={[r, r, length - coneHeight, 20]} />
+              <meshStandardMaterial
+                color="#bcc4cc"
+                metalness={0.7}
+                roughness={0.3}
+              />
+            </mesh>
+          )}
+        </group>
       ) : (
         <mesh position={[0, length / 2, 0]}>
           <cylinderGeometry args={[r, r, length, 20]} />

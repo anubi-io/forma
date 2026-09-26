@@ -53,6 +53,25 @@ test("real WebGPU agrees with the CPU on profiles, origins, clipping and rewind"
         160,
       ),
     );
+    for (const diameter of [0.5, 1, 2])
+      results.push(
+        await window.gpuHarness.compare(
+          "T1 M6\nG0 X4 Y4 Z3\nG1 Z-0.1\nG1 X10 Z-0.3\nG1 X30 Y25 Z-8\nG1 X29 Z-1\nG1 X8 Y8 Z-5",
+          { x: 40, y: 30, z: 10, origin: "corner", zOrigin: "top" },
+          {
+            1: {
+              id: "taper",
+              name: "Tapered ball",
+              kind: "ball",
+              diameter,
+              taperAngle: 10.3,
+              shank: 6,
+              length: 30.5,
+            },
+          },
+          192,
+        ),
+      );
     return results;
   });
   for (const r of report)

@@ -1,5 +1,11 @@
 import { stockOrigin } from "./coordinates";
 import {
+  contactRadius,
+  cutterRadius,
+  detailDiameter,
+  validTaper,
+} from "./cutterProfile";
+import {
   STRIDE,
   type Assignments,
   type FlipAxis,
@@ -182,6 +188,7 @@ const fmt = (n: number, digits = 2) => Number(n.toFixed(digits)).toString();
 const supported = (t: Tool) =>
   t.kind === "flat" || t.kind === "ball" || t.kind === "v";
 const validTool = (t: Tool) =>
+  validTaper(t) &&
   Number.isFinite(t.diameter) &&
   t.diameter > 0 &&
   t.diameter <= 100 &&
@@ -227,10 +234,14 @@ export function analyzeProgram(
     .map((id) => tools[id])
     .filter((t) => t && validTool(t));
   const diameter = usedTools.reduce((min, t) => Math.min(min, t.diameter), 6);
+  const samplingDiameter = usedTools.reduce(
+    (min, t) => Math.min(min, detailDiameter(t)),
+    6,
+  );
   const longest = Math.max(stock.x, stock.y);
   const resolution = Math.min(
     options.maxResolution ?? 600,
-    Math.max(160, Math.ceil((longest * 8) / diameter)),
+    Math.max(160, Math.ceil((longest * 8) / samplingDiameter)),
   );
   const nx = Math.max(2, Math.ceil((resolution * stock.x) / longest));
   const ny = Math.max(2, Math.ceil((resolution * stock.y) / longest));
@@ -474,17 +485,9 @@ export function analyzeProgram(
         `T${id}: assign a valid cutter to analyze material contact and repeated passes.`,
       );
     }
-    const r = t.diameter / 2;
+    const r = cutterRadius(t);
     const depth = stock.z - minZ;
-    const effectiveDiameter =
-      t.kind === "v"
-        ? Math.min(
-            t.diameter,
-            (t.tip ?? 0) + 2 * depth * Math.tan((t.angle! * Math.PI) / 360),
-          )
-        : t.kind === "ball" && depth < r
-          ? 2 * Math.sqrt(Math.max(0, 2 * r * depth - depth * depth))
-          : t.diameter;
+    const effectiveDiameter = 2 * contactRadius(t, depth);
     const edgeRadius = effectiveDiameter / 2;
     // Clip the segment to the Z slab before XY bounds checks: an above-stock
     // approach outside the blank is not itself an out-of-bounds cut.
@@ -539,7 +542,7 @@ export function analyzeProgram(
       // Micrometre rounding only accommodates opposite-direction arc arithmetic.
       const a = [ax, ay, az].map((n) => n.toFixed(6)).join(",");
       const b = [bx, by, bz].map((n) => n.toFixed(6)).join(",");
-      key = `${t.kind}/${t.diameter}/${t.angle ?? 0}/${t.tip ?? 0}/${a < b ? `${a}/${b}` : `${b}/${a}`}`;
+      key = `${t.kind}/${t.diameter}/${t.angle ?? 0}/${t.tip ?? 0}/${t.taperAngle ?? 0}/${t.shank ?? 0}/${t.length ?? 0}/${a < b ? `${a}/${b}` : `${b}/${a}`}`;
       repeated = seen.has(key);
     }
     let freshDepth = 0,

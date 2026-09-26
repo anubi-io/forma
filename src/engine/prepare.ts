@@ -2,6 +2,14 @@ import { STRIDE, type Assignments, type Program, type Stock } from "../types";
 import { MAX_RESOLUTION, MAX_GPU_RESOLUTION } from "./quality";
 import { validThread } from "./threadProfile";
 import { stockOrigin } from "./coordinates";
+import {
+  contactRadius,
+  cutterRadius,
+  detailDiameter,
+  taperedBall,
+  taperProfile,
+  validTaper,
+} from "./cutterProfile";
 import type { PreparedThreads } from "./prepareThreads";
 
 export const TILE_SIZE = 16;
@@ -56,6 +64,7 @@ export function simulationGrid(
     if (!t) throw new Error(`Assign a tool to T${id} to simulate.`);
     if (!Number.isFinite(t.diameter) || t.diameter <= 0 || t.diameter > 100)
       throw new Error(`T${id}: invalid diameter (0.01–100 mm).`);
+    if (!validTaper(t)) throw new Error(`T${id}: invalid ball taper geometry.`);
     if (
       t.kind === "v" &&
       (!Number.isFinite(t.angle) ||
@@ -74,9 +83,9 @@ export function simulationGrid(
       throw new Error(
         `T${id}: invalid thread cutter pitch, angle or neck diameter.`,
       );
-    if (t.diameter < (2 * longest) / n)
+    if (detailDiameter(t) < 2 * Math.max(stock.x / nx, stock.y / ny))
       warnings.push(
-        `T${id}: diameter is close to the grid spacing. Increase quality for fine detail.`,
+        `T${id}: ${t.kind === "v" ? "tip diameter" : "diameter"} is close to the grid spacing. Increase quality for fine detail.`,
       );
   }
   return {
@@ -207,15 +216,16 @@ export function prepareSimulation(
     }
     if (Math.min(az, bz) >= stock.z) continue;
     const tool = tools[m[i + 6]],
-      r = tool.diameter / 2;
+      r = cutterRadius(tool);
     if (tool.kind === "unsupported" || tool.kind === "thread") continue;
     if (Math.min(az, bz) < 0)
       warn(segment + 1, "The toolpath extends below the stock bottom.");
+    const edgeRadius = contactRadius(tool, stock.z - Math.min(az, bz));
     if (
-      Math.min(ax, bx) - r < 0 ||
-      Math.max(ax, bx) + r > stock.x ||
-      Math.min(ay, by) - r < 0 ||
-      Math.max(ay, by) + r > stock.y
+      Math.min(ax, bx) - edgeRadius < 0 ||
+      Math.max(ax, bx) + edgeRadius > stock.x ||
+      Math.min(ay, by) - edgeRadius < 0 ||
+      Math.max(ay, by) + edgeRadius > stock.y
     )
       warn(
         segment + 1,
@@ -244,6 +254,7 @@ export function prepareSimulation(
       dy = (by - ay) * (hi - lo),
       dz = (bz - az) * (hi - lo);
     if (Math.min(z, z + dz) >= stock.z) continue;
+    const taper = taperedBall(tool) ? taperProfile(tool) : undefined;
     cuts.set(
       [
         x,
@@ -253,9 +264,13 @@ export function prepareSimulation(
         dx,
         dy,
         dz,
-        tool.kind === "ball" ? 1 : tool.kind === "v" ? 2 : 0,
-        (tool.tip ?? 0) / 2,
-        tool.kind === "v" ? 1 / Math.tan((tool.angle! * Math.PI) / 360) : 0,
+        taper ? 3 : tool.kind === "ball" ? 1 : tool.kind === "v" ? 2 : 0,
+        taper ? taper.radius : (tool.tip ?? 0) / 2,
+        taper
+          ? taper.slope
+          : tool.kind === "v"
+            ? 1 / Math.tan((tool.angle! * Math.PI) / 360)
+            : 0,
         Math.max(0, Math.min(z, z + dz)),
         1,
       ],

@@ -1,5 +1,13 @@
 // WGSL functions are injected by Three's public node API; no backend internals.
 export const CUT_HEIGHT = /* wgsl */ `
+fn taperedHeight(t: f32, u: vec2f, a: vec4f, d: vec4f, radius: f32, slope: f32) -> f32 {
+  let radial = length(u - d.xy * t);
+  let sine = inverseSqrt(1.0 + slope * slope);
+  let join = radius * slope * sine;
+  var h = radial * slope - radius * (1.0 / sine - 1.0);
+  if (radial <= join) { h = radius - sqrt(max(0.0, radius * radius - radial * radial)); }
+  return a.z + d.z * t + h;
+}
 fn cutHeight(p: vec2f, a: vec4f, d: vec4f, profile: vec4f, old: f32) -> f32 {
   if (old <= profile.z) { return old; }
   let u = p - a.xy;
@@ -22,6 +30,23 @@ fn cutHeight(p: vec2f, a: vec4f, d: vec4f, profile: vec4f, old: f32) -> f32 {
     hi = min(1.0, t0 + halfSpan);
   }
   if (lo > hi) { return old; }
+  if (d.w == 3.0) {
+    let radius = profile.x;
+    let slope = profile.y;
+    var h = min(taperedHeight(lo, u, a, d, radius, slope), taperedHeight(hi, u, a, d, radius, slope));
+    if (l2 > 1e-16) {
+      if (perp2 <= radius * radius) {
+        let t = clamp(t0 - d.z * sqrt(max(0.0, radius * radius - perp2)) / sqrt(l2 * (l2 + d.z * d.z)), lo, hi);
+        h = min(h, taperedHeight(t, u, a, d, radius, slope));
+      }
+      let slope2 = slope * slope * l2;
+      if (d.z * d.z < slope2) {
+        let t = clamp(t0 - d.z * sqrt(perp2 / (l2 * (slope2 - d.z * d.z))), lo, hi);
+        h = min(h, taperedHeight(t, u, a, d, radius, slope));
+      }
+    }
+    return min(old, max(0.0, h));
+  }
   var t = select(lo, hi, d.z < 0.0);
   if (d.w == 1.0 && l2 > 1e-16) {
     t = clamp(t0 - d.z * sqrt(max(0.0, r2 - perp2)) / sqrt(l2 * (l2 + d.z * d.z)), lo, hi);

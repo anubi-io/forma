@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { strToU8, zipSync } from "fflate";
+import { Simulator } from "../src/engine/simulate";
+import { parseProgram } from "../src/engine/parse";
 import {
   importMakeraTools,
   importMakeraSetup,
@@ -36,6 +38,66 @@ const archive = (tools: unknown[], extra = {}) =>
   });
 
 describe("Makera Studio tool mapping", () => {
+  it.each([15, 30])(
+    "imports engraving type 3 with half-angle %s and cuts with the saved tip",
+    (halfAngle) => {
+      const tools = importMakeraTools(
+        archive([
+          {
+            ...flat,
+            toolName: "Engraving(Metal)",
+            toolType: 3,
+            angle: 0,
+            halfAngle,
+            tipDiameter: 0.2,
+            fluteLength: 2.6,
+          },
+        ]),
+      );
+      expect(tools[1]).toMatchObject({
+        kind: "v",
+        diameter: 3.175,
+        angle: halfAngle * 2,
+        tip: 0.2,
+        length: 2.6,
+      });
+      const surface = new Simulator(
+        parseProgram("T1 M6\nG0 X20 Y20 Z5\nG1 Z-1"),
+        { x: 40, y: 40, z: 10, origin: "corner", zOrigin: "top" },
+        tools,
+        160,
+      ).seek(1);
+      expect(surface.heights[80 * 161 + 80]).toBeCloseTo(9, 6);
+      expect(surface.heights[80 * 161 + 81]).toBeCloseTo(
+        9 + 0.15 / Math.tan((halfAngle * Math.PI) / 180),
+        5,
+      );
+      expect(surface.warnings.join()).not.toMatch(/special profile/);
+    },
+  );
+  it.each([
+    { halfAngle: undefined },
+    { halfAngle: 0 },
+    { halfAngle: 90 },
+    { halfAngle: "15" },
+    { tipDiameter: -0.1 },
+    { tipDiameter: 4 },
+  ])("keeps invalid engraving geometry unsupported: %j", (change) => {
+    expect(
+      importMakeraTools(
+        archive([
+          {
+            ...flat,
+            toolType: 3,
+            angle: 30,
+            halfAngle: 15,
+            tipDiameter: 0.2,
+            ...change,
+          },
+        ]),
+      )[1].kind,
+    ).toBe("unsupported");
+  });
   it("imports stock axes and known material with tools", () => {
     expect(importMakeraSetup(archive([flat]))).toMatchObject({
       dimensions: { x: 200, y: 150, z: 5 },

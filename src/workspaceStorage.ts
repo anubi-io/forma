@@ -2,6 +2,7 @@ import type { Assignments, Stock, BottomSetup } from "./types";
 import { MATERIALS } from "./data/materials";
 import { SIMULATION_QUALITIES, DEFAULT_QUALITY } from "./engine/quality";
 import { validThread } from "./engine/threadProfile";
+import { validTaper } from "./engine/cutterProfile";
 import { upgradeCatalogThreads } from "./data/upgradeTools";
 import { validStockOrigin } from "./engine/coordinates";
 
@@ -69,6 +70,7 @@ export function validProject(p: unknown): p is WorkspaceProject {
       typeof t.name === "string" &&
       ["flat", "ball", "v", "thread", "unsupported"].includes(t.kind) &&
       (t.kind !== "thread" || validThread(t as import("./types").Tool)) &&
+      validTaper(t as import("./types").Tool) &&
       inRange(t.diameter, Number.MIN_VALUE, 100) &&
       (t.length === undefined || inRange(t.length, Number.MIN_VALUE, 2000)) &&
       (t.shank === undefined || inRange(t.shank, Number.MIN_VALUE, 100)) &&

@@ -1,4 +1,5 @@
 import { decodeNc } from "./decode";
+import { PROGRAM_LIMIT_BYTES, PROJECT_LIMIT_BYTES } from "./importLimits";
 import { importMakeraSetup } from "./makeraProject";
 import { validProject, type WorkspaceProject } from "../workspaceStorage";
 import { upgradeCatalogThreads } from "../data/upgradeTools";
@@ -18,7 +19,10 @@ self.onmessage = ({
     if (name.endsWith(".mks")) {
       result = { type: "setup", setup: importMakeraSetup(data.bytes) };
     } else {
-      const code = decodeNc(data.bytes);
+      const code = decodeNc(
+        data.bytes,
+        name.endsWith(".json") ? PROJECT_LIMIT_BYTES : PROGRAM_LIMIT_BYTES,
+      );
       if (name.endsWith(".json")) {
         const project: unknown = JSON.parse(code);
         if (!validProject(project)) throw new Error("Invalid project file.");

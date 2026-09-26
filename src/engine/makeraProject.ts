@@ -2,7 +2,6 @@ import { unzipSync } from "fflate";
 import type { Assignments, Stock, Tool } from "../types";
 import { idealThreadNeck, validThread } from "./threadProfile";
 
-const LIMIT = 25 * 1024 * 1024;
 const METADATA_LIMIT = 4 * 1024 * 1024;
 const record = (v: unknown): v is Record<string, any> =>
   !!v && typeof v === "object" && !Array.isArray(v);
@@ -15,7 +14,6 @@ export function importMakeraSetup(bytes: Uint8Array): {
   dimensions: Pick<Stock, "x" | "y" | "z">;
   material?: string;
 } {
-  if (bytes.length > LIMIT) throw new Error("The file limit is 25 MB.");
   let metadata: Uint8Array | undefined;
   let found = false;
   try {
@@ -95,17 +93,24 @@ export function importMakeraSetup(bytes: Uint8Array): {
         };
         if (positive(raw.fluteLength, 2000)) tool.length = raw.fluteLength;
         if (positive(raw.handleDiameter, 100)) tool.shank = raw.handleDiameter;
+        // Makera stores chamfers (2) with an included angle and engravers (3)
+        // with a half-angle. The unused angle field is normally zero.
+        const includedAngle =
+          raw.toolType === 2
+            ? raw.angle
+            : raw.toolType === 3 && positive(raw.halfAngle, 90)
+              ? raw.halfAngle * 2
+              : undefined;
         if (
-          raw.toolType === 2 &&
-          positive(raw.angle, 180) &&
-          raw.angle < 180 &&
+          positive(includedAngle, 180) &&
+          includedAngle < 180 &&
           typeof raw.tipDiameter === "number" &&
           Number.isFinite(raw.tipDiameter) &&
           raw.tipDiameter >= 0 &&
           raw.tipDiameter <= raw.diameter
         ) {
           tool.kind = "v";
-          tool.angle = raw.angle;
+          tool.angle = includedAngle;
           tool.tip = raw.tipDiameter;
         }
         if (raw.toolType === 6) {

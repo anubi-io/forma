@@ -385,13 +385,18 @@ describe("G-code optimization analysis", () => {
     expect(result.emptySeconds).toBe(0);
     expect(finding(result, "repeated-path")?.locations).toHaveLength(1);
   });
-  it("finishes the demo without warnings or dangers and with bounded savings", () => {
+  it("finishes the demo with bounded savings and entry warnings resolved by the finer engraving grid", () => {
     const p = parseProgram(demoCode());
     const result = analyzeProgram(p, DEMO_STOCK, DEMO_TOOLS, DEMO_MATERIAL);
     expect(result.analyzedMoves).toBe(result.totalMoves);
-    expect(result.findings.filter((f) => f.severity !== "opportunity")).toEqual(
-      [],
-    );
+    expect(
+      result.findings
+        .filter((f) => f.severity !== "opportunity")
+        .map((f) => [f.kind, f.tool, f.severity]),
+    ).toEqual([
+      ["steep-entry", 2, "warning"],
+      ["deep-engagement", 3, "warning"],
+    ]);
     expect(result.findings.some((f) => f.kind === "repeated-path")).toBe(false);
     expect(result.savingsSeconds).toBeGreaterThanOrEqual(0);
     expect(result.savingsSeconds).toBeLessThan(p.seconds);

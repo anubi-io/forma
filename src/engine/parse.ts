@@ -11,7 +11,7 @@ import {
   type WorkOffsets,
 } from "../types";
 
-const MAX_MOVES = 1_000_000;
+const MAX_MOVES = 4_000_000;
 const AXES = ["X", "Y", "Z"];
 const SUPPORTED_G = new Set([
   0,
@@ -101,7 +101,7 @@ export function parseProgram(
     const d = Math.hypot(q[0] - p[0], q[1] - p[1], q[2] - p[2]);
     if (!d) return;
     if (size / STRIDE >= MAX_MOVES)
-      fail("1 million segment limit reached. Split the program.");
+      fail("4 million segment limit reached. Split the program.");
     if (!rapid && tool === -1)
       fail(
         "cutting move with no tool loaded (T-1). Select a tool with T/M6 first.",

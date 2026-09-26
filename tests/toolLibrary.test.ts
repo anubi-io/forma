@@ -88,7 +88,11 @@ describe("Makera tool library", () => {
         expect(tool.tip).toBeGreaterThanOrEqual(0);
         expect(tool.tip).toBeLessThanOrEqual(tool.diameter);
       }
-      if (/Drill|Ball Nose Engraving|Solder Mask/.test(tool.name))
+      if (/Ball Nose Engraving/.test(tool.name)) {
+        expect(tool.kind).toBe("ball");
+        expect(tool.taperAngle).toBeGreaterThan(0);
+      }
+      if (/Drill|Solder Mask/.test(tool.name))
         expect(tool.kind).toBe("unsupported");
       if (tool.kind === "thread") {
         expect(tool.pitch).toBeGreaterThan(0);

@@ -3,13 +3,17 @@
 // https://github.com/MakeraInc/CarveraController/blob/main/src/makera.py
 // https://github.com/ReSpeak/quicklz/blob/master/Format.md
 // This bounds-checked reader supports non-streaming levels 1 and 3.
-const MAX_BYTES = 25 * 1024 * 1024;
+import { PROGRAM_LIMIT_BYTES } from "./importLimits";
 const invalid = () =>
   new Error("Compressed Makera NC file is damaged or incomplete.");
-const tooLarge = () =>
-  new Error("The decompressed program exceeds the 25 MB limit.");
+const tooLarge = (limit: number) =>
+  new Error(`The decoded file exceeds the ${limit / 1024 / 1024} MB limit.`);
 
-function unpackBlock(block: Uint8Array, budget: number): Uint8Array {
+function unpackBlock(
+  block: Uint8Array,
+  budget: number,
+  limit: number,
+): Uint8Array {
   if (block.length < 3) throw invalid();
   const flags = block[0],
     wide = !!(flags & 2),
@@ -24,7 +28,7 @@ function unpackBlock(block: Uint8Array, budget: number): Uint8Array {
     packedSize = wide ? view.getUint32(1, true) : block[1],
     size = wide ? view.getUint32(5, true) : block[2];
   if (packedSize !== block.length || !size) throw invalid();
-  if (size > budget) throw tooLarge();
+  if (size > budget) throw tooLarge(limit);
   if (!(flags & 1)) {
     if (block.length !== header + size) throw invalid();
     return block.subarray(header);
@@ -112,8 +116,11 @@ function unpackBlock(block: Uint8Array, budget: number): Uint8Array {
   return output;
 }
 
-export function decodeNc(bytes: Uint8Array): string {
-  if (bytes.length > MAX_BYTES) throw tooLarge();
+export function decodeNc(
+  bytes: Uint8Array,
+  limit = PROGRAM_LIMIT_BYTES,
+): string {
+  if (bytes.length > limit) throw tooLarge(limit);
   let decoded = bytes;
   // The controller uses these first two bytes to identify its compressed NCs.
   if (bytes.length >= 2 && bytes[0] === 0 && bytes[1] === 0) {
@@ -129,7 +136,8 @@ export function decodeNc(bytes: Uint8Array): string {
       if (length < 3 || position + length > bytes.length - 2) throw invalid();
       const block = unpackBlock(
         bytes.subarray(position, position + length),
-        MAX_BYTES - total,
+        limit - total,
+        limit,
       );
       total += block.length;
       for (const byte of block) checksum = (checksum + byte) & 0xffff;

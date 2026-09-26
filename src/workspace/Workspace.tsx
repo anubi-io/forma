@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { PROGRAM_LIMIT_MB, PROJECT_LIMIT_MB } from "../engine/importLimits";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { UploadSimple, Warning } from "@phosphor-icons/react";
 import type { WorkspaceSnapshot } from "../workspaceStorage";
@@ -283,7 +284,10 @@ export default function Workspace({ initial, restoreError }: Props) {
           <div className="drop-overlay">
             <UploadSimple size={40} />
             <h2>Drop your program here</h2>
-            <p>G-code · 25 MB per file / .forma.json project · 55 MB</p>
+            <p>
+              G-code · {PROGRAM_LIMIT_MB} MB per file / .forma.json project ·{" "}
+              {PROJECT_LIMIT_MB} MB
+            </p>
           </div>
         )}
         {toolModal !== null && (
