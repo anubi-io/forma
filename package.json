@@ -35,8 +35,8 @@
     "fake-indexeddb": "^6.2.5",
     "prettier": "^3.9.8",
     "typescript": "^7.0.2",
-    "vite": "^8.3.0",
-    "vitest": "^4.1.11"
+    "vite": "^8.3.3",
+    "vitest": "^4.1.12"
   },
   "dependencies": {
     "@fontsource/geist": "^5.3.0",

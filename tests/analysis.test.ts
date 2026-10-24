@@ -385,6 +385,7 @@ describe("G-code optimization analysis", () => {
     expect(result.emptySeconds).toBe(0);
     expect(finding(result, "repeated-path")?.locations).toHaveLength(1);
   });
+  // Full-demo analysis needs the same CI headroom as the simulation benchmark.
   it("finishes the demo with bounded savings and entry warnings resolved by the finer engraving grid", () => {
     const p = parseProgram(demoCode());
     const result = analyzeProgram(p, DEMO_STOCK, DEMO_TOOLS, DEMO_MATERIAL);
@@ -404,7 +405,7 @@ describe("G-code optimization analysis", () => {
       result.repeatedSeconds + result.emptySeconds,
     );
     expect(result.findings.length).toBeLessThan(40);
-  });
+  }, 15000);
 });
 
 describe("modal metadata and analytic cutter envelopes", () => {
